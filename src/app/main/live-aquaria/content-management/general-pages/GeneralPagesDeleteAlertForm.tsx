@@ -1,0 +1,58 @@
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import ReportIcon from '@mui/icons-material/Report';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import { DialogContent, DialogContentText } from '@mui/material';
+import { GeneralPageInterface } from './interfaces';
+
+interface Props {
+	toggleModal: () => void;
+	isOpen: boolean;
+	handleAlertForm: () => void;
+	clickedDeleteRowData: GeneralPageInterface;
+}
+
+function GeneralPagesDeleteAlertForm({ toggleModal, isOpen, handleAlertForm, clickedDeleteRowData }: Props) {
+	return (
+		<Dialog
+			open={isOpen}
+			onClose={toggleModal}
+		>
+			<DialogTitle className="flex items-center gap-[5px] text-[16px] font-bold">
+				<ReportIcon className="text-red text-[20px]" />
+				{clickedDeleteRowData?.is_deletable ? 'Delete Confirmation' : 'Cannot Delete as it is a default page'}
+			</DialogTitle>
+
+			<DialogContent>
+				<DialogContentText className="text-[10px] sm:text-[12px] lg:text-[14px]">
+					{clickedDeleteRowData?.is_deletable
+						? 'Are you sure you want to delete this General Page ?'
+						: 'You cannot delete this page as it is a default page'}
+				</DialogContentText>
+			</DialogContent>
+
+			<DialogActions>
+				{clickedDeleteRowData?.is_deletable ? (
+					<Button
+						className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-white font-500 py-0 rounded-[6px] bg-primaryBlue hover:bg-primaryBlue/80 bokShadow"
+						variant="contained"
+						size="medium"
+						onClick={handleAlertForm}
+					>
+						Confirm
+					</Button>
+				) : null}
+
+				<Button
+					className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-gray-600 font-500 py-0 rounded-[6px] bg-gray-300 hover:bg-gray-300/80 boxShadow"
+					onClick={toggleModal}
+				>
+					Cancel
+				</Button>
+			</DialogActions>
+		</Dialog>
+	);
+}
+
+export default GeneralPagesDeleteAlertForm;

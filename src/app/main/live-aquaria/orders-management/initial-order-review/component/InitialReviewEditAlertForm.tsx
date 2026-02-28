@@ -1,0 +1,98 @@
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import ReportIcon from '@mui/icons-material/Report';
+import DialogContent from '@mui/material/DialogContent';
+import { DialogContentText, Grid, Typography } from '@mui/material';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import { Form, Formik } from 'formik';
+import TextFormDateField from 'src/app/common/FormComponents/TextFormDateField';
+import * as yup from 'yup';
+import { ItemInterface } from './ItemDetails';
+
+interface Props {
+	toggleModal: () => void;
+	isOpen: boolean;
+	clickedRowData: ItemInterface;
+	seletedOldData: ItemInterface;
+	handleAlertForm: (clickedRowData: any) => void;
+}
+
+function InitialReviewEditAlertForm({ toggleModal, isOpen, clickedRowData, handleAlertForm, seletedOldData }: Props) {
+	const schema = yup.object().shape({
+		delete_reason: yup.string().required('Delete Reason is required')
+	});
+
+	return (
+		<Dialog
+			open={isOpen}
+			onClose={toggleModal}
+		>
+			<Formik
+				initialValues={{
+					credit_points: `$ ${(Number(clickedRowData?.unitPrice) * (Number(seletedOldData?.quantity) - Number(clickedRowData?.quantity) ?? 0)).toFixed(2)}`
+				}}
+				onSubmit={null}
+				validationSchema={schema}
+			>
+				{() => (
+					<Form className="min-w-full max-w-[100vw]">
+						<DialogTitle className="flex items-center gap-[5px] text-[16px] font-bold">
+							<ReportIcon className="text-red text-[20px]" />
+							Edit Confirmation
+						</DialogTitle>
+						<DialogContent>
+							<DialogContentText className="text-[10px] sm:text-[12px] lg:text-[14px]">
+								Are you sure you want to Edit ?
+							</DialogContentText>
+							<Grid
+								container
+								spacing={2}
+								className="pt-[5px] min-w-full max-w-[100vw]"
+							>
+								<Grid
+									item
+									// xs={12}
+									// sm={6}
+									// md={4}
+									// lg={3}
+									className="formikFormField pt-[5px!important] w-68% ml-[0px]"
+								>
+									<Typography>Credit Point</Typography>
+
+									<TextFormDateField
+										disabled
+										placeholder=""
+										id="date"
+										name="credit_points"
+									/>
+								</Grid>
+							</Grid>
+						</DialogContent>
+						<DialogActions>
+							<Button
+								className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-white font-500 py-0 rounded-[6px] bg-primaryBlue hover:bg-primaryBlue/80 bokShadow"
+								variant="contained"
+								size="medium"
+								type="submit"
+								onClick={() => {
+									handleAlertForm(clickedRowData);
+								}}
+							>
+								Confirm
+							</Button>
+							<Button
+								className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-gray-600 font-500 py-0 rounded-[6px] bg-gray-300 hover:bg-gray-300/80 boxShadow"
+								onClick={toggleModal}
+							>
+								Cancel
+							</Button>
+						</DialogActions>
+					</Form>
+				)}
+			</Formik>
+		</Dialog>
+	);
+}
+
+export default InitialReviewEditAlertForm;

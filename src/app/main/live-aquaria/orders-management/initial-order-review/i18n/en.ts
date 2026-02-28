@@ -1,0 +1,33 @@
+const locale = {
+	DATE_FROM: 'Order By Date / From',
+	DATE_TO: 'Order By Date / To',
+	CUSTOMER: 'Customer',
+	ORDER_ID: 'Order ID',
+	CUSTOMER_NAME: 'Customer Name',
+	EMAIL: 'Email',
+	DATE: 'Date',
+	ELAPSED_DAYS: 'Elapsed Days',
+	TOTAL_AMOUNT: 'Total Amount',
+	STATUS: 'Status',
+	CLEAR_FILTERS: 'Clear Filters',
+	FILTER_ALL: 'Filter All',
+	PRODUCT_ID: 'Product ID',
+	PRODUCT_NAME: 'Product Name',
+	SIZE: 'Size',
+	QUANTITY: 'Quantity',
+	AVAILABLE_QTY: 'Available Quantity',
+	WAREHOUSE: 'Warehouse',
+	CUSTOMER_REMARK: 'Customer Remark',
+	ADMIN_REMARK: 'Admin Remark',
+	UNIT_PRICE: 'Unit Price',
+	TOTAL_PRICE: 'Total Price',
+	CHANGE_EXPECTED_DELIVERY_DATE: 'Change Expected Delivery Date',
+	ORDER_STATUS: 'Order Status',
+	CANCEL_ORDER_REASON: 'Cancel Order Reason',
+	ACTION_TAKEN: 'Action Taken',
+	TAKEN_BY: 'Taken By',
+	DELIVERY_DATE: 'Delivery Date',
+	REMARK: 'Remark'
+};
+
+export default locale;

@@ -1,0 +1,118 @@
+version: 2.1
+
+executors:
+  docker-executor:
+    docker:
+      - image: cimg/base:2022.09
+    resource_class: medium
+    working_directory: ~/project
+
+environment:
+  DOCKER_IMAGE_NAME: laqadmin
+
+jobs:
+  build-uat:
+    executor: docker-executor
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: Login to DockerHub
+          command: |
+            echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+      - run:
+          name: Build Docker Image for UAT
+          command: |
+            docker build -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:uat .
+      - run:
+          name: Push Docker Image for UAT
+          command: |
+            docker push $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:uat
+
+  build-qa:
+    executor: docker-executor
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: Login to DockerHub
+          command: |
+            echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+      - run:
+          name: Build Docker Image for QA
+          command: |
+            docker build -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:qa .
+      - run:
+          name: Push Docker Image for QA
+          command: |
+            docker push $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:qa
+
+  deploy-uat:
+    executor: docker-executor
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:eylHNA8l4KhH/uLV0QbZ3xRsqAeMhaR615/Y4zFlwXQ"
+      - run:
+          name: Deploy Docker Image on EC2 (UAT)
+          command: |
+            ssh -o StrictHostKeyChecking=no ec2-user@$EC2_PUBLIC_IP_UAT "
+              command -v docker || { echo 'Docker not found, installing...'; sudo yum install -y docker && sudo service docker start; }
+              echo $DOCKER_PASSWORD | sudo docker login --username $DOCKER_USERNAME --password-stdin
+              sudo docker stop \$(sudo docker ps -qa) || true
+              sudo docker rm \$(sudo docker ps -qa) || true
+              sudo docker rmi \$(sudo docker images -qa) || true
+              sudo docker run -d --name $DOCKER_IMAGE_NAME --restart=unless-stopped -p 3000:3000 $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:uat
+            "
+
+  deploy-qa:
+    executor: docker-executor
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:uQP2cCqLmzDWeJkHo3IWJ5N0mILbu2iT+AOiCElc75k"
+      - run:
+          name: Deploy Docker Image on EC2 (QA)
+          command: |
+            ssh -o StrictHostKeyChecking=no ec2-user@$EC2_PUBLIC_IP_QA "
+              command -v docker || { echo 'Docker not found, installing...'; sudo yum install -y docker && sudo service docker start; }
+              echo $DOCKER_PASSWORD | sudo docker login --username $DOCKER_USERNAME --password-stdin
+              sudo docker stop \$(sudo docker ps -qa) || true
+              sudo docker rm \$(sudo docker ps -qa) || true
+              sudo docker rmi \$(sudo docker images -qa) || true
+              sudo docker run -d --name $DOCKER_IMAGE_NAME --restart=unless-stopped -p 3000:3000 $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:qa
+            "
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build-uat:
+          context: laq-admin-uat
+          filters:
+            branches:
+              only:
+                - uat
+      - deploy-uat:
+          context: laq-admin-uat
+          requires:
+            - build-uat
+          filters:
+            branches:
+              only:
+                - uat
+      - build-qa:
+          context: laq-admin-qa
+          filters:
+            branches:
+              only:
+                - qa
+      - deploy-qa:
+          context: laq-admin-qa
+          requires:
+            - build-qa
+          filters:
+            branches:
+              only:
+                - qa

@@ -1,0 +1,32 @@
+const locale = {
+	GIFT_CERTIFICATE: 'Gift Certificate',
+	NEW_GIFT_CERTIFICATE: 'New Gift Certificate',
+	NO: 'No',
+	CODE_SEQUENCE: 'Code Sequence',
+	NAME: 'Name',
+	DISPLAY_NAME: 'Display Name',
+	THUMBNAIL: 'Thumbnail',
+	PRICE: 'Price',
+	START_DATE: 'Start Date',
+	END_DATE: 'End Date',
+	ACTIVE: 'Active',
+	ADVANCED_FILTERING: 'Advanced Filtering',
+	GIFT_CARD_NAME: 'Gift Card Name',
+	GIFT_CARD_CODE: 'Gift Card Code',
+	CUSTOMER_NAME: 'Customer Name',
+	MOBILE: 'Mobile',
+	EMAIL: 'Email',
+	CITY: 'City',
+	STATE: 'State',
+	COUNTRY: 'Country',
+	FILTER_ALL: 'Filter All',
+	CREATE_A_GIFT_CERTIFICATE: 'Create a Gift Certificate',
+	GIFT_CERTIFICATE_THUMBNAIL: 'Gift Certificate Thumbnail',
+	NEW_GIFT_CERTIFICATE_STYLE: 'New Gift Certificate Style',
+	CLEAR: 'Clear',
+	CANCEL: 'Cancel',
+	SAVE: 'Save',
+	ENABLE_PRICE: 'Enable Price'
+};
+
+export default locale;

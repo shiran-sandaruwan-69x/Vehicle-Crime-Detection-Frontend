@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import axios, { AxiosResponse } from 'axios';
-import { GET_USER_ROLES } from 'src/app/axios/services/AdminServices';
+import {GET_USER_ROLES, SAVE_ADMIN_ROLE} from 'src/app/axios/services/AdminServices';
 import useDebounce from 'app/shared-components/useDebounce';
 import { useAppSelector } from 'app/store/hooks';
 import { selectUser } from 'src/app/auth/user/store/userSlice';
@@ -73,14 +73,14 @@ function UserRolesApp() {
 		roleName: null,
 		status: null
 	});
-	const [userRoles, setUserRoles] = useState<Role[]>([]);
+	const [userRoles, setUserRoles] = useState<any[]>([]);
 	const [count, setCount] = useState(100);
 	const [isTableLoading] = useState(false);
 	const [isModelOpen, setIsModelOpen] = useState(false);
 	const [isAdd, setIsAdd] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
 	const [isView, setIsView] = useState(false);
-	const [selectedRow, setSelectedRow] = useState<Role | null>(null);
+	const [selectedRow, setSelectedRow] = useState<any>(null);
 	const debouncedFilter = useDebounce<AdvanceFilteringTypes>(filteredValues, 1000);
 
 	const user = useAppSelector(selectUser);
@@ -117,13 +117,9 @@ function UserRolesApp() {
 			field: 'name'
 		},
 		{
-			title: 'Description',
-			field: 'description'
-		},
-		{
 			title: 'Status',
 			field: 'is_active',
-			render: (rowData: Role) => {
+			render: (rowData: any) => {
 				return rowData.is_active === 1 ? 'Active' : 'Inactive';
 			}
 		}
@@ -131,12 +127,14 @@ function UserRolesApp() {
 
 	async function filterUserRoles(filterVals: AdvanceFilteringTypes) {
 		try {
-			const response: AxiosResponse<RoleResponse> = await axios.get(
-				`${GET_USER_ROLES}?limit=${pageSize}&page=${pageNo + 1}&sort=name,asc&filter=name,${filterVals.roleName ? filterVals.roleName : null}|is_active,${filterVals.status ? filterVals.status : null}`
+			const response: AxiosResponse<any> = await axios.get(
+				`${GET_USER_ROLES}`
 			);
-
-			setUserRoles(response.data.data);
-			setCount(response.data.meta.total);
+			const data = response?.data?.map((item) => ({
+				...item,
+				is_active: item?.status == true ? 1 : 0,
+			}));
+			setUserRoles(data);
 		} catch (error) {
 			const axiosError = error as ExtendedAxiosError;
 
@@ -150,7 +148,8 @@ function UserRolesApp() {
 		}
 	}
 
-	const handleFormModelOpen = (isNew: boolean, isEdit: boolean, isView: boolean, seletedData: Role) => {
+	const handleFormModelOpen = (isNew: boolean, isEdit: boolean, isView: boolean, seletedData: any) => {
+		console.log('seletedData vv',seletedData)
 		setIsAdd(isNew);
 		setIsEdit(isEdit);
 		setIsView(isView);
@@ -158,11 +157,12 @@ function UserRolesApp() {
 		setIsModelOpen(true);
 	};
 
-	const tableRowViewHandler = (rowData: Role) => {
+	const tableRowViewHandler = (rowData: any) => {
 		handleFormModelOpen(false, false, true, rowData);
 	};
 
-	const tableRowEditHandler = (rowData: Role) => {
+	const tableRowEditHandler = (rowData: any) => {
+		console.log('rowData bbb',rowData, userRoles)
 		handleFormModelOpen(false, true, false, rowData);
 	};
 
@@ -194,20 +194,7 @@ function UserRolesApp() {
 					xl={2}
 					className="formikFormField pt-[5px!important]"
 				>
-					<Typography className="formTypography">Role Name</Typography>
-					<TextField
-						className="w-full"
-						id="outlined-basic"
-						label=""
-						variant="outlined"
-						size="small"
-						onChange={(event) => {
-							setFilteredValues({
-								...filteredValues,
-								roleName: event.target.value
-							});
-						}}
-					/>
+
 				</Grid>
 				<Grid
 					item
@@ -218,25 +205,7 @@ function UserRolesApp() {
 					xl={2}
 					className="formikFormField pt-[5px!important]"
 				>
-					<Typography className="formTypography">Status</Typography>
-					<Autocomplete
-						className="w-full"
-						size="small"
-						disablePortal
-						options={StatusOptions}
-						renderInput={(params) => (
-							<TextField
-								{...params}
-								label=""
-							/>
-						)}
-						onChange={(event, value) => {
-							setFilteredValues({
-								...filteredValues,
-								status: value?.value.toString()
-							});
-						}}
-					/>
+
 				</Grid>
 
 				<Grid
@@ -253,7 +222,7 @@ function UserRolesApp() {
 						type="button"
 						variant="contained"
 						size="medium"
-						disabled={!(permissionsToStore && permissionsToStore.action)}
+						//disabled={!(permissionsToStore && permissionsToStore.action)}
 						onClick={() => handleFormModelOpen(true, false, false, null)}
 					>
 						New Role
@@ -297,9 +266,9 @@ function UserRolesApp() {
 						selectionExport={null}
 						isColumnChoser
 						records={userRoles}
-						tableRowViewHandler={permissionsToShow && permissionsToShow.action ? tableRowViewHandler : null}
+						tableRowViewHandler={tableRowViewHandler}
 						tableRowEditHandler={
-							permissionsToUpdate && permissionsToUpdate.action ? tableRowEditHandler : null
+							tableRowEditHandler
 						}
 						disableSearch
 					/>

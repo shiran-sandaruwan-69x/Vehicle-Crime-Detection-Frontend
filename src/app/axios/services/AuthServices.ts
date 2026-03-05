@@ -5,7 +5,7 @@
 
 const AUTH_BASE_URL: string = import.meta.env.VITE_BASE_URL_SERVICE as string;
 
-export const SIGN_IN = `${AUTH_BASE_URL}/api/admin/v1/auth/login`;
+export const SIGN_IN = `${AUTH_BASE_URL}/api/userlogin`;
 export const SAVE_ADMIN_USER = `${AUTH_BASE_URL}/api/admin/v1/admins`;
 export const UPDATE_ADMIN_USER = `${AUTH_BASE_URL}/api/admin/v1/admins`;
 

@@ -20,7 +20,6 @@ import { Role } from './UserRolesApp';
 const schema = z.object({
 	name: z.string().min(3, 'Must be at least 3 characters').max(25, 'Must be maximum 25 characters'),
 	is_active: z.number(),
-	description: z.string().min(3, 'Must be at least 3 characters')
 });
 
 interface Props {
@@ -29,7 +28,7 @@ interface Props {
 	isOpen: boolean;
 	setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	isEdit?: boolean;
-	selectedRow?: Role;
+	selectedRow?: any;
 	onCloseHandler?: () => void;
 	isView?: boolean;
 }
@@ -43,10 +42,11 @@ function UserRolesForm(props: Props) {
 		id: selectedRow ? Number(selectedRow.id) : 0,
 		name: selectedRow ? selectedRow.name : '',
 		is_active: selectedRow ? selectedRow?.is_active : 1,
-		description: selectedRow && selectedRow?.description !== null ? selectedRow.description : ''
 	};
 
-	const { handleSubmit, formState, control } = useForm<Role>({
+	console.log('selectedRow',selectedRow)
+
+	const { handleSubmit, formState, control } = useForm<any>({
 		mode: 'onChange',
 		defaultValues,
 		resolver: zodResolver(schema)
@@ -60,7 +60,7 @@ function UserRolesForm(props: Props) {
 		onCloseHandler();
 	}
 
-	function onSubmit(data: Role) {
+	function onSubmit(data: any) {
 		if (isEdit) {
 			updateRole(data);
 		} else {
@@ -68,13 +68,13 @@ function UserRolesForm(props: Props) {
 		}
 	}
 
-	async function saveRole(data: Role) {
+	async function saveRole(data: any) {
+		console.log('mmm',data)
 		setLoading(true);
 		try {
 			const data_save = {
 				name: data.name,
-				description: data.description,
-				is_active: data.is_active
+				status: data?.is_active
 			};
 			await axios.post(SAVE_ADMIN_ROLE, data_save);
 			toast.success('Admin Role created successfully');
@@ -94,15 +94,15 @@ function UserRolesForm(props: Props) {
 		}
 	}
 
-	async function updateRole(data: Role) {
+	async function updateRole(data: any) {
+		console.log('is_active',data)
 		setLoading(true);
 		try {
 			const data_update = {
 				name: data.name,
-				description: data.description,
-				is_active: data.is_active
+				status: data?.is_active
 			};
-			await axios.put(UPDATE_ADMIN_ROLE + selectedRow.id, data_update);
+			await axios.put(`${UPDATE_ADMIN_ROLE}/${selectedRow?.id}`, data_update);
 			toast.success('Admin Role updated successfully');
 		} catch (error) {
 			const axiosError = error as ExtendedAxiosError;
@@ -195,36 +195,36 @@ function UserRolesForm(props: Props) {
 									)}
 								/>
 							</Grid>
-							<Grid
-								item
-								xs={12}
-								className="formikFormField pt-[5px!important]"
-							>
-								<Typography className="formTypography">
-									Description <span className="text-red">*</span>
-								</Typography>
-								<Controller
-									name="description"
-									control={control}
-									render={({ field }) => (
-										<TextField
-											{...field}
-											className="mb-0"
-											// label='Description'
-											id="description"
-											variant="outlined"
-											fullWidth
-											size="small"
-											multiline
-											rows={4}
-											disabled={isView}
-											error={!!errors.description}
-											helperText={errors?.description?.message}
-											required
-										/>
-									)}
-								/>
-							</Grid>
+							{/*<Grid*/}
+							{/*	item*/}
+							{/*	xs={12}*/}
+							{/*	className="formikFormField pt-[5px!important]"*/}
+							{/*>*/}
+							{/*	<Typography className="formTypography">*/}
+							{/*		Description <span className="text-red">*</span>*/}
+							{/*	</Typography>*/}
+							{/*	<Controller*/}
+							{/*		name="description"*/}
+							{/*		control={control}*/}
+							{/*		render={({ field }) => (*/}
+							{/*			<TextField*/}
+							{/*				{...field}*/}
+							{/*				className="mb-0"*/}
+							{/*				// label='Description'*/}
+							{/*				id="description"*/}
+							{/*				variant="outlined"*/}
+							{/*				fullWidth*/}
+							{/*				size="small"*/}
+							{/*				multiline*/}
+							{/*				rows={4}*/}
+							{/*				disabled={isView}*/}
+							{/*				error={!!errors.description}*/}
+							{/*				helperText={errors?.description?.message}*/}
+							{/*				required*/}
+							{/*			/>*/}
+							{/*		)}*/}
+							{/*	/>*/}
+							{/*</Grid>*/}
 							<Grid
 								item
 								xs={12}
@@ -258,7 +258,7 @@ function UserRolesForm(props: Props) {
 													}}
 												/>
 											}
-											label={`Role ${field.value === 1 ? 'Active' : 'Inactive'}`}
+											label={`Role ${field.value === true ? 'Active' : 'Inactive'}`}
 										/>
 									)}
 								/>

@@ -19,161 +19,157 @@ import useJwtAuth from '../useJwtAuth';
  * Form Validation Schema
  */
 const schema = z.object({
-  email: z
-    .string()
-    .email('You must enter a valid email')
-    .min(1, 'Email is Required'),
-  password: z
-    .string()
-    .min(1, 'Password is Required')
-    .min(4, 'Password is too short - must be at least 4 characters.'),
+	//email: z.string().email('You must enter a valid email').min(1, 'Email is Required'),
+	userName: z.string().min(1, 'User Name is Required'),
+	password: z.string().min(1, 'Password is Required').min(4, 'Password is too short - must be at least 4 characters.')
 });
 
 type FormType = {
-  email: string;
-  password: string;
-  remember?: boolean;
+	email: string;
+    userName: string;
+	password: string;
+	remember?: boolean;
 };
 
 const defaultValues = {
-  email: '',
-  password: '',
-  remember: true,
+	email: '',
+	userName: '',
+	password: '',
+	remember: true
 };
 
 function JwtSignInForm() {
-  const { signIn } = useJwtAuth();
+	const { signIn } = useJwtAuth();
 
-  const { control, formState, handleSubmit, setValue, setError } =
-    useForm<FormType>({
-      mode: 'onChange',
-      defaultValues,
-      resolver: zodResolver(schema),
-    });
+	const { control, formState, handleSubmit, setValue, setError } = useForm<FormType>({
+		mode: 'onChange',
+		defaultValues,
+		resolver: zodResolver(schema)
+	});
 
-  const { isValid, dirtyFields, errors } = formState;
+	const { isValid, dirtyFields, errors } = formState;
 
-  const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
 
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    // bgcolor: 'background.paper',
-    // border: '2px solid #000',
-    boxShadow: 24,
-    // p: 4,
-  };
+	const modalStyle = {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: 400,
+		// bgcolor: 'background.paper',
+		// border: '2px solid #000',
+		boxShadow: 24
+		// p: 4,
+	};
 
-  const [showPassword, setShowPassword] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+	const togglePasswordVisibility = () => {
+		setShowPassword(!showPassword);
+	};
 
-  useEffect(() => {
-    setValue('email', 'dev@zincat.net', {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-    setValue('password', '123456', {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-  }, [setValue]);
+	useEffect(() => {
+		setValue('userName', 'shiran', {
+			shouldDirty: true,
+			shouldValidate: true
+		});
+		setValue('password', '1234', {
+			shouldDirty: true,
+			shouldValidate: true
+		});
+	}, [setValue]);
 
-  function onSubmit(formData: FormType) {
-    const { email, password } = formData;
+	function onSubmit(formData: FormType) {
+		const { userName, email, password } = formData;
 
-    signIn({
-      email,
-      password,
-    }).catch(
-      (
-        error: AxiosError<
-          {
-            type: 'email' | 'password' | 'remember' | `root.${string}` | 'root';
-            message: string;
-          }[]
-        >
-      ) => {
-        const errorData = error.response.data;
+		signIn({
+			email: userName,
+			password
+		}).catch(
+			(
+				error: AxiosError<
+					{
+						type: 'email' | 'password' | 'remember' | `root.${string}` | 'root';
+						message: string;
+					}[]
+				>
+			) => {
+				const errorData = error.response.data;
 
-        errorData.forEach((err) => {
-          setError(err.type, {
-            type: 'manual',
-            message: err.message,
-          });
-        });
-      }
-    );
-  }
+				errorData.forEach((err) => {
+					setError(err.type, {
+						type: 'manual',
+						message: err.message
+					});
+				});
+			}
+		);
+	}
 
-  return (
-    <div>
-      <form
-        name='loginForm'
-        noValidate
-        className='mt-32 flex w-full flex-col justify-center'
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Controller
-          name='email'
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className='mb-24'
-              label='Email'
-              autoFocus
-              error={!!errors.email}
-              helperText={errors?.email?.message}
-              variant='outlined'
-              required
-              fullWidth
-            />
-          )}
-        />
+	return (
+		<div>
+			<form
+				name="loginForm"
+				noValidate
+				className="mt-32 flex w-full flex-col justify-center"
+				onSubmit={handleSubmit(onSubmit)}
+			>
+				<Controller
+					name="userName"
+					control={control}
+					render={({ field }) => (
+						<TextField
+							{...field}
+							className="mb-24"
+							label="User Name"
+							autoFocus
+							error={!!errors.userName}
+							helperText={errors?.userName?.message}
+							variant="outlined"
+							required
+							fullWidth
+						/>
+					)}
+				/>
 
-        <Controller
-          name='password'
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className='mb-16'
-              label='Password'
-              type={showPassword ? 'text' : 'password'}
-              error={!!errors.password}
-              helperText={errors?.password?.message}
-              variant='outlined'
-              required
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position='end'>
-                    <IconButton
-                      aria-label='toggle password visibility'
-                      onClick={togglePasswordVisibility}
-                      edge='end'
-                      size='small'
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )}
-        />
+				<Controller
+					name="password"
+					control={control}
+					render={({ field }) => (
+						<TextField
+							{...field}
+							className="mb-16"
+							label="Password"
+							type={showPassword ? 'text' : 'password'}
+							error={!!errors.password}
+							helperText={errors?.password?.message}
+							variant="outlined"
+							required
+							fullWidth
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick={togglePasswordVisibility}
+											edge="end"
+											size="small"
+										>
+											{showPassword ? <Visibility /> : <VisibilityOff />}
+										</IconButton>
+									</InputAdornment>
+								)
+							}}
+						/>
+					)}
+				/>
 
-        <div className='flex flex-col items-center justify-center sm:flex-row sm:justify-between'>
-          {/* <Controller
+				<div className="flex flex-col items-center justify-center sm:flex-row sm:justify-between">
+					{/* <Controller
 						name="remember"
 						control={control}
 						render={({ field }) => (
@@ -191,14 +187,14 @@ function JwtSignInForm() {
 						)}
 					/> */}
 
-          <Link
-            className='text-md !text-primaryBlue font-medium'
-            to='/forgot-password'
-          >
-            Forgot password?
-          </Link>
+					<Link
+						className="text-md !text-primaryBlue font-medium"
+						to="/forgot-password"
+					>
+						Forgot password?
+					</Link>
 
-          {/* <Button
+					{/* <Button
 						className="text-md font-medium hover:bg-transparent active:bg-transparent focus:bg-transparent"
 						// to="/pages/auth/forgot-password"
 						to="/forgot-password"
@@ -206,26 +202,29 @@ function JwtSignInForm() {
 					>
 						Forgot password?
 					</Button> */}
-        </div>
+				</div>
 
-        <Button
-          variant='contained'
-          className='w-full text-white text-lg mt-16 rounded-[6px] bg-primaryBlue hover:bg-primaryBlueLight'
-          aria-label='Sign in'
-          disabled={_.isEmpty(dirtyFields) || !isValid}
-          type='submit'
-          size='large'
-        >
-          Sign In
-        </Button>
-      </form>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={modalStyle}>
-          <ClassicForgotPasswordPage />
-        </Box>
-      </Modal>
-    </div>
-  );
+				<Button
+					variant="contained"
+					className="w-full text-white text-lg mt-16 rounded-[6px] bg-primaryBlue hover:bg-primaryBlueLight"
+					aria-label="Sign in"
+					disabled={_.isEmpty(dirtyFields) || !isValid}
+					type="submit"
+					size="large"
+				>
+					Sign In
+				</Button>
+			</form>
+			<Modal
+				open={open}
+				onClose={handleClose}
+			>
+				<Box sx={modalStyle}>
+					<ClassicForgotPasswordPage />
+				</Box>
+			</Modal>
+		</div>
+	);
 }
 
 export default JwtSignInForm;

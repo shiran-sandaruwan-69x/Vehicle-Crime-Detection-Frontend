@@ -26,6 +26,7 @@ export type JwtAuthConfig = {
 
 export type SignInPayload = {
 	userName: string;
+	email?: string;
 	password: string;
 };
 
@@ -203,7 +204,7 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 
 					const { data, token , permissions} = response.data;
 					console.log("permissions",permissions)
-					
+
 
 					const tempData: Partial<User> = {
 						uid: 'XgbuVEXBU5gtSKdbQRP1Zbbby1i1',
@@ -263,22 +264,40 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 		handleFailure: (T: AxiosError) => void
 	): Promise<User | AxiosError> => {
 		try {
+
+			const formData = new URLSearchParams();
+			formData.append("username", dataCredentials.email);
+			formData.append("password", dataCredentials.password);
+
 			const response: AxiosResponse<{
 				token: string;
 				permissions: any;
-				data: {
-					email: string;
-					first_name: string;
-					last_name: string;
-					mobile: string;
-					id: string;
-					is_active: number;
-					nic: string;
-					roles: any; // Assuming UserData is already defined as shown previously
-				};
-			}> = await axios.post(SIGN_IN, dataCredentials);
+				data: any;
+			}> = await axios.post(SIGN_IN, formData, {
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+			});
 
-			const { data, token,permissions } = response.data;
+
+			// const response: AxiosResponse<{
+			// 	token: string;
+			// 	permissions: any;
+			// 	data: {
+			// 		email: string;
+			// 		first_name: string;
+			// 		last_name: string;
+			// 		mobile: string;
+			// 		id: string;
+			// 		is_active: number;
+			// 		nic: string;
+			// 		roles: any; // Assuming UserData is already defined as shown previously
+			// 	};
+			// }> = await axios.post(SIGN_IN, dataCredentials);
+			//
+			const { data, access_token,permissions } = response.data;
+
+			console.log('response',response.data)
 
 			const tempData: Partial<User> = {
 				uid: 'XgbuVEXBU5gtSKdbQRP1Zbbby1i1',
@@ -298,7 +317,7 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 
 			const combinedData = { ...data, ...tempData, permissions: permissions  };
 
-			handleSuccess(combinedData, token);
+			handleSuccess(combinedData, access_token);
 			return data;
 		} catch (error) {
 			const axiosError = error as AxiosError;

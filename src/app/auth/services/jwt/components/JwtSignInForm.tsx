@@ -191,7 +191,7 @@ function JwtSignInForm() {
 						className="text-md !text-primaryBlue font-medium"
 						to="/forgot-password"
 					>
-						Forgot password?
+
 					</Link>
 
 					{/* <Button

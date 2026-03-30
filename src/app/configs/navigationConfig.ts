@@ -13,6 +13,44 @@ i18next.addResourceBundle('ar', 'navigation', ar);
  */
 const navigationConfig: FuseNavItemType[] = [
 	{
+		id: 'dashboards',
+		title: 'Dashboards',
+		subtitle: 'operation',
+		type: 'group',
+		icon: 'heroicons-outline:home',
+		translate: 'DASHBOARDS',
+		children: [
+			{
+				id: 'dashboards.project',
+				title: 'Dashboard',
+				type: 'item',
+				icon: 'heroicons-outline:presentation-chart-line',
+				url: '/dashboards/project'
+			},
+			{
+				id: 'dashboards.analytics',
+				title: 'Operation',
+				type: 'item',
+				icon: 'heroicons-outline:chart-pie',
+				url: '/dashboards/operation'
+			},
+			// {
+			// 	id: 'dashboards.finance',
+			// 	title: 'Finance',
+			// 	type: 'item',
+			// 	icon: 'heroicons-outline:cash',
+			// 	url: '/dashboards/finance'
+			// },
+			// {
+			// 	id: 'dashboards.crypto',
+			// 	title: 'Crypto',
+			// 	type: 'item',
+			// 	icon: 'heroicons-outline:currency-dollar',
+			// 	url: '/dashboards/crypto'
+			// }
+		]
+	},
+	{
 		id: 'usermanagement',
 		title: 'UserManagement',
 		// subtitle: 'User Roles, Permissions, etc.',
@@ -46,86 +84,78 @@ const navigationConfig: FuseNavItemType[] = [
 			}
 		]
 	},
-	{
-		id: 'systemSettings',
-		title: 'System Settings',
-		// subtitle: 'User Roles, Permissions, etc.',
-		type: 'group',
-		icon: 'heroicons-outline:home',
-		translate: 'SYSTEM_SETTINGS',
-		children: [
-			{
-				id: 'systemSettings.free-shipping-settings',
-				title: 'Free Shipping Settings',
-				type: 'item',
-				icon: 'heroicons-outline:user-group',
-				url: '/system-settings/free-shipping-settings'
-				// translate: 'ROLES'
-			},
-			{
-				id: 'systemSettings.back-order-settings',
-				title: 'Back Order Settings',
-				type: 'item',
-				icon: 'heroicons-outline:lock-closed',
-				url: '/system-settings/back-order-settings'
-				// translate: 'PERMISSIONS'
-			},
-			{
-				id: 'systemSettings.divers-den-settings',
-				title: 'Divers Den Settings',
-				type: 'item',
-				icon: 'heroicons-outline:user',
-				url: '/system-settings/divers-den-settings'
-				// translate: 'USERS'
-			},
-			{
-				id: 'systemSettings.reward-point-settings',
-				title: 'Reward Point Settings',
-				type: 'item',
-				icon: 'heroicons-outline:user',
-				url: '/system-settings/reward-point-settings'
-				// translate: 'USERS'
-			},
-			{
-				id: 'systemSettings.box-charge-settings',
-				title: 'Box Charge Settings',
-				type: 'item',
-				icon: 'heroicons-outline:user',
-				url: '/system-settings/box-charge-settings'
-				// translate: 'USERS'
-			},
-			{
-				id: 'systemSettings.laq-companies-details',
-				title: 'LAQ / CIS Company Details',
-				type: 'item',
-				icon: 'heroicons-outline:user',
-				url: '/system-settings/companies-details'
-				// translate: 'USERS'
-			}
-		]
-	},
+	// {
+	// 	id: 'systemSettings',
+	// 	title: 'System Settings',
+	// 	// subtitle: 'User Roles, Permissions, etc.',
+	// 	type: 'group',
+	// 	icon: 'heroicons-outline:home',
+	// 	translate: 'SYSTEM_SETTINGS',
+	// 	children: [
+	// 		{
+	// 			id: 'systemSettings.free-shipping-settings',
+	// 			title: 'Free Shipping Settings',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:user-group',
+	// 			url: '/system-settings/free-shipping-settings'
+	// 			// translate: 'ROLES'
+	// 		},
+	// 		{
+	// 			id: 'systemSettings.back-order-settings',
+	// 			title: 'Back Order Settings',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:lock-closed',
+	// 			url: '/system-settings/back-order-settings'
+	// 			// translate: 'PERMISSIONS'
+	// 		},
+	// 		{
+	// 			id: 'systemSettings.divers-den-settings',
+	// 			title: 'Divers Den Settings',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:user',
+	// 			url: '/system-settings/divers-den-settings'
+	// 			// translate: 'USERS'
+	// 		},
+	// 		{
+	// 			id: 'systemSettings.reward-point-settings',
+	// 			title: 'Reward Point Settings',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:user',
+	// 			url: '/system-settings/reward-point-settings'
+	// 			// translate: 'USERS'
+	// 		},
+	// 		{
+	// 			id: 'systemSettings.box-charge-settings',
+	// 			title: 'Box Charge Settings',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:user',
+	// 			url: '/system-settings/box-charge-settings'
+	// 			// translate: 'USERS'
+	// 		},
+	// 		{
+	// 			id: 'systemSettings.laq-companies-details',
+	// 			title: 'LAQ / CIS Company Details',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:user',
+	// 			url: '/system-settings/companies-details'
+	// 			// translate: 'USERS'
+	// 		}
+	// 	]
+	// },
 
 	{
 		id: 'customerService',
 		title: 'customerService',
 		subtitle: '',
 		type: 'group',
-		translate: 'CUSTOMER_SERVICE',
+		translate: 'CASE_REPORT',
 		children: [
 			{
-				id: 'customerService.claims',
-				title: 'Claims',
-				icon: 'heroicons-outline:chart-pie',
-				type: 'item',
-				url: 'customer-service/customer-claims',
-				end: true
-			},
-			{
 				id: 'customerService.hotlineOrders',
-				title: 'Hotline Orders',
+				title: 'Generate Case Report',
 				icon: 'heroicons-outline:chart-pie',
 				type: 'item',
-				url: 'customer-service/hotline-orders',
+				url: 'report/generate-case-report',
 				end: true
 			}
 			// {
@@ -174,157 +204,174 @@ const navigationConfig: FuseNavItemType[] = [
 	// 	]
 	// },
 	{
-		id: 'promotion',
-		title: 'promotion',
+		id: 'vehicles',
+		title: 'vehicles',
 		subtitle: '',
 		type: 'group',
-		translate: 'PROMOTION',
+		translate: 'VEHICLES',
 		children: [
 			{
-				id: 'promotion.promotionCycle',
-				title: 'Promotion Cycle',
+				id: 'vehicles.vehiclesDetails',
+				title: 'Vehicles Details',
 				icon: 'heroicons-outline:chart-pie',
 				type: 'item',
-				url: 'promotion/promotion-cycle',
+				url: 'vehicles/vehicles-details',
+				end: true
+			},
+		]
+	},
+	{
+		id: 'masterData',
+		title: 'masterData',
+		subtitle: '',
+		type: 'group',
+		translate: 'MASTER_DATA',
+		children: [
+			{
+				id: 'masterData.Counties',
+				title: 'Counties',
+				icon: 'heroicons-outline:chart-pie',
+				type: 'item',
+				url: 'masterData/counties',
 				end: true
 			},
 			{
-				id: 'promotion.promotions',
-				title: 'Promotion',
+				id: 'masterData.alertType',
+				title: 'Alert Type',
 				icon: 'heroicons-outline:chart-pie',
 				type: 'item',
-				url: 'promotion/promotions',
+				url: 'masterData/alert-type',
 				end: true
 			},
 			{
-				id: 'promotion.termsAndConditions',
-				title: 'Terms & Conditions',
+				id: 'masterData.systemAlertPriority',
+				title: 'System Alert Priority',
 				icon: 'heroicons-outline:chart-pie',
 				type: 'item',
-				url: 'promotion/terms-and-conditions',
+				url: 'masterData/system-alert-priority',
 				end: true
-			}
+			},
 		]
 	},
 
-	{
-		id: 'ordersManagement',
-		title: 'Orders Management',
-		subtitle: '',
-		type: 'group',
-		translate: 'INITIAL_ORDER_REVIEW',
-		children: [
-			{
-				id: 'ordersManagement.adminOrderReview',
-				title: 'Initial Orders Review',
-				icon: 'heroicons-outline:user',
-				type: 'item',
-				url: 'orders-management/initial-order-review',
-				end: true
-			},
-			{
-				id: 'ordersManagement.backOrders',
-				title: 'Back Orders Management',
-				type: 'collapse',
-				children: [
-					{
-						id: 'generalAdvertisement.backOrders.back_orders',
-						title: 'Back Order',
-						icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'order-management/back-orders',
-						end: true
-					},
-					{
-						id: 'generalAdvertisement.backOrders.backOrderHistory',
-						title: 'Back Order History',
-						icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'order-management/back-orders-history',
-						end: true
-					}
-				]
-			},
-			{
-				id: 'ordersManagement.orderPlanningManagement',
-				title: 'Order Planning Management',
-				type: 'collapse',
-				children: [
-					{
-						id: 'ordersManagement.orderPlanningManagement.orderPlanning',
-						title: 'Order Planning',
-						icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'order-management/order-planning',
-						end: true
-					}
-					// {
-					// 	id: 'ordersManagement.orderPlanningManagement.planSummery',
-					// 	title: 'Plan Summery',
-					// 	icon: 'heroicons-outline:user',
-					// 	type: 'item',
-					// 	url: 'order-management/plan-summery',
-					// 	end: true
-					// }
-				]
-			},
-			{
-				id: 'ordersManagement.wareHouseOrderPlaning',
-				title: 'Warehouse Order Management',
-				type: 'collapse',
-				children: [
-					// {
-					// 	id: 'generalAdvertisement.orderPlaning.wareHouseOrderPlaning',
-					// 	title: 'Warehouse Order Planing',
-					// 	icon: 'heroicons-outline:user',
-					// 	type: 'item',
-					// 	url: 'order-management/ware-house-order-planing',
-					// 	end: true
-					// },
-					{
-						id: 'generalAdvertisement.orderPlaning.assignAPicker',
-						title: 'Assign Picker',
-						icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'order-management/assign-a-picker',
-						end: true
-					}
-				]
-			},
-			{
-				id: 'ordersManagement.pickerList',
-				title: 'Picker List',
-				icon: 'heroicons-outline:user',
-				type: 'item',
-				url: 'orders-management/picker-list',
-				end: true
-			},
-			{
-				id: 'ordersManagement.dispatching',
-				title: 'Dispatching',
-				icon: 'heroicons-outline:user',
-				type: 'item',
-				url: 'orders-management/dispatching',
-				end: true
-			},
-			{
-				id: 'ordersManagement.cancelOrders',
-				title: 'Cancel Orders',
-				icon: 'heroicons-outline:user',
-				type: 'item',
-				url: 'orders-management/cancel-orders',
-				end: true
-			},
-			{
-				id: 'ordersManagement.orderFulfilment',
-				title: 'Order Fulfilment',
-				icon: 'heroicons-outline:user',
-				type: 'item',
-				url: 'orders-management/order-fulfilment',
-				end: true
-			}
-		]
-	},
+	// {
+	// 	id: 'ordersManagement',
+	// 	title: 'Orders Management',
+	// 	subtitle: '',
+	// 	type: 'group',
+	// 	translate: 'INITIAL_ORDER_REVIEW',
+	// 	children: [
+	// 		{
+	// 			id: 'ordersManagement.adminOrderReview',
+	// 			title: 'Initial Orders Review',
+	// 			icon: 'heroicons-outline:user',
+	// 			type: 'item',
+	// 			url: 'orders-management/initial-order-review',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'ordersManagement.backOrders',
+	// 			title: 'Back Orders Management',
+	// 			type: 'collapse',
+	// 			children: [
+	// 				{
+	// 					id: 'generalAdvertisement.backOrders.back_orders',
+	// 					title: 'Back Order',
+	// 					icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'order-management/back-orders',
+	// 					end: true
+	// 				},
+	// 				{
+	// 					id: 'generalAdvertisement.backOrders.backOrderHistory',
+	// 					title: 'Back Order History',
+	// 					icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'order-management/back-orders-history',
+	// 					end: true
+	// 				}
+	// 			]
+	// 		},
+	// 		{
+	// 			id: 'ordersManagement.orderPlanningManagement',
+	// 			title: 'Order Planning Management',
+	// 			type: 'collapse',
+	// 			children: [
+	// 				{
+	// 					id: 'ordersManagement.orderPlanningManagement.orderPlanning',
+	// 					title: 'Order Planning',
+	// 					icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'order-management/order-planning',
+	// 					end: true
+	// 				}
+	// 				// {
+	// 				// 	id: 'ordersManagement.orderPlanningManagement.planSummery',
+	// 				// 	title: 'Plan Summery',
+	// 				// 	icon: 'heroicons-outline:user',
+	// 				// 	type: 'item',
+	// 				// 	url: 'order-management/plan-summery',
+	// 				// 	end: true
+	// 				// }
+	// 			]
+	// 		},
+	// 		{
+	// 			id: 'ordersManagement.wareHouseOrderPlaning',
+	// 			title: 'Warehouse Order Management',
+	// 			type: 'collapse',
+	// 			children: [
+	// 				// {
+	// 				// 	id: 'generalAdvertisement.orderPlaning.wareHouseOrderPlaning',
+	// 				// 	title: 'Warehouse Order Planing',
+	// 				// 	icon: 'heroicons-outline:user',
+	// 				// 	type: 'item',
+	// 				// 	url: 'order-management/ware-house-order-planing',
+	// 				// 	end: true
+	// 				// },
+	// 				{
+	// 					id: 'generalAdvertisement.orderPlaning.assignAPicker',
+	// 					title: 'Assign Picker',
+	// 					icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'order-management/assign-a-picker',
+	// 					end: true
+	// 				}
+	// 			]
+	// 		},
+	// 		{
+	// 			id: 'ordersManagement.pickerList',
+	// 			title: 'Picker List',
+	// 			icon: 'heroicons-outline:user',
+	// 			type: 'item',
+	// 			url: 'orders-management/picker-list',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'ordersManagement.dispatching',
+	// 			title: 'Dispatching',
+	// 			icon: 'heroicons-outline:user',
+	// 			type: 'item',
+	// 			url: 'orders-management/dispatching',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'ordersManagement.cancelOrders',
+	// 			title: 'Cancel Orders',
+	// 			icon: 'heroicons-outline:user',
+	// 			type: 'item',
+	// 			url: 'orders-management/cancel-orders',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'ordersManagement.orderFulfilment',
+	// 			title: 'Order Fulfilment',
+	// 			icon: 'heroicons-outline:user',
+	// 			type: 'item',
+	// 			url: 'orders-management/order-fulfilment',
+	// 			end: true
+	// 		}
+	// 	]
+	// },
 
 	// {order-management/order-planing
 	// 	id: 'ordersManagement',
@@ -337,239 +384,239 @@ const navigationConfig: FuseNavItemType[] = [
 	// 		]
 	// },
 
-	{
-		id: 'customers',
-		title: 'Customer Management',
-		subtitle: '',
-		type: 'group',
-		translate: 'CUSTOMER_MANAGEMENT',
-		children: [
-			{
-				id: 'customers.customer-view',
-				title: 'Customers',
-				icon: 'heroicons-outline:users',
-				type: 'item',
-				url: 'customers/customer-view',
-				end: true
-			}
-		]
-	},
+	// {
+	// 	id: 'customers',
+	// 	title: 'Customer Management',
+	// 	subtitle: '',
+	// 	type: 'group',
+	// 	translate: 'CUSTOMER_MANAGEMENT',
+	// 	children: [
+	// 		{
+	// 			id: 'customers.customer-view',
+	// 			title: 'Customers',
+	// 			icon: 'heroicons-outline:users',
+	// 			type: 'item',
+	// 			url: 'customers/customer-view',
+	// 			end: true
+	// 		}
+	// 	]
+	// },
 	//
-	{
-		id: 'pdPManagement',
-		title: 'PDP Management',
-		subtitle: '',
-		type: 'group',
-		translate: 'PDP_MANAGEMENT',
-		children: [
-			{
-				id: 'pdPManagement.pdPManagementView',
-				title: 'Product Display Pages',
-				icon: 'heroicons-outline:film',
-				type: 'item',
-				url: 'pdp-management/pdm-management-view',
-				end: true
-			},
-			{
-				id: 'pdPManagement.pdPManagementPublish',
-				title: 'Publish',
-				icon: 'heroicons-outline:film',
-				type: 'item',
-				url: 'pdp-management/pdm-publish',
-				end: true
-			}
-		]
-	},
+	// {
+	// 	id: 'pdPManagement',
+	// 	title: 'PDP Management',
+	// 	subtitle: '',
+	// 	type: 'group',
+	// 	translate: 'PDP_MANAGEMENT',
+	// 	children: [
+	// 		{
+	// 			id: 'pdPManagement.pdPManagementView',
+	// 			title: 'Product Display Pages',
+	// 			icon: 'heroicons-outline:film',
+	// 			type: 'item',
+	// 			url: 'pdp-management/pdm-management-view',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'pdPManagement.pdPManagementPublish',
+	// 			title: 'Publish',
+	// 			icon: 'heroicons-outline:film',
+	// 			type: 'item',
+	// 			url: 'pdp-management/pdm-publish',
+	// 			end: true
+	// 		}
+	// 	]
+	// },
 
-	{
-		id: 'diversDenPdp',
-		title: 'Divers Den Management',
-		subtitle: '',
-		type: 'group',
-		translate: 'DIVER_DEN_ADVERTISEMENT',
-		children: [
-			{
-				id: 'diversDenPdp.diversDenManagement',
-				title: "Diver's Den PDP",
-				icon: 'heroicons-outline:film',
-				type: 'item',
-				url: 'divers-den-management/divers-den-pdp',
-				end: true
-			},
-			{
-				id: 'diversDenPdp.diversDenPdpPublish',
-				title: 'Publish',
-				icon: 'heroicons-outline:film',
-				type: 'item',
-				url: 'divers-den-management/divers-den-pdp-publish',
-				end: true
-			},
-			{
-				id: 'diversDenPdp.sneakPeekEmail',
-				title: 'Sneak Peek Email',
-				icon: 'heroicons-outline:film',
-				type: 'item',
-				url: 'divers-den-management/sneak-peek-email',
-				end: true
-			},
-			{
-				id: 'diversDenPdp.dailyEmail',
-				title: 'Daily Email',
-				icon: 'heroicons-outline:film',
-				type: 'item',
-				url: 'divers-den-management/daily-email',
-				end: true
-			}
-		]
-	},
+	// {
+	// 	id: 'diversDenPdp',
+	// 	title: 'Divers Den Management',
+	// 	subtitle: '',
+	// 	type: 'group',
+	// 	translate: 'DIVER_DEN_ADVERTISEMENT',
+	// 	children: [
+	// 		{
+	// 			id: 'diversDenPdp.diversDenManagement',
+	// 			title: "Diver's Den PDP",
+	// 			icon: 'heroicons-outline:film',
+	// 			type: 'item',
+	// 			url: 'divers-den-management/divers-den-pdp',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'diversDenPdp.diversDenPdpPublish',
+	// 			title: 'Publish',
+	// 			icon: 'heroicons-outline:film',
+	// 			type: 'item',
+	// 			url: 'divers-den-management/divers-den-pdp-publish',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'diversDenPdp.sneakPeekEmail',
+	// 			title: 'Sneak Peek Email',
+	// 			icon: 'heroicons-outline:film',
+	// 			type: 'item',
+	// 			url: 'divers-den-management/sneak-peek-email',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'diversDenPdp.dailyEmail',
+	// 			title: 'Daily Email',
+	// 			icon: 'heroicons-outline:film',
+	// 			type: 'item',
+	// 			url: 'divers-den-management/daily-email',
+	// 			end: true
+	// 		}
+	// 	]
+	// },
 
-	{
-		id: 'laqMasterData',
-		title: 'LAQ master data',
-		subtitle: '',
-		type: 'group',
-		translate: 'LAQ_MASTER_DATA',
-		children: [
-			{
-				id: 'laqMasterData.productMaster',
-				title: 'Product Master',
-				type: 'collapse',
-				icon: 'heroicons-outline:cube',
-				children: [
-					{
-						id: 'laqMasterData.productMaster.ETFMasterData',
-						title: 'ETF Item Master Data',
-						// icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'laq-master-data/etf-master-data',
-						end: true
-					},
-					{
-						id: 'laqMasterData.productMaster.CommonProductMaster',
-						title: 'Common Product Master',
-						// icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'laq-master-data/common-product-master',
-						end: true
-					},
-					{
-						id: 'laqMasterData.productMaster.productMasterData',
-						title: 'LAQ Item Master Data',
-						// icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'laq-master-data/product-list-view',
-						end: true
-					},
-					{
-						id: 'laqMasterData.productMaster.diversDenMasterData',
-						title: 'Divers Den Master Data',
-						// icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'laq-master-data/divers-den-master-data',
-						end: true
-					},
-
-					{
-						id: 'laqMasterData.productMaster.productReviews',
-						title: 'Product Reviews',
-						// icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'laq-master-data/product-reviews',
-						end: true
-					},
-
-					{
-						id: 'laqMasterData.productMaster.allReviews',
-						title: 'All Reviews',
-						// icon: 'heroicons-outline:user',
-						type: 'item',
-						url: 'laq-master-data/all-product-reviews',
-						end: true
-					}
-				]
-			},
-			{
-				id: 'laqMasterData.categoryManagement',
-				title: 'Category Management',
-				type: 'item',
-				icon: 'heroicons-outline:chart-pie',
-				url: 'laq-master-data/category-management',
-				end: true
-			},
-			{
-				id: 'laqMasterData.Attribute',
-				title: 'Attribute',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-bar',
-				url: 'laq-master-data/attribute',
-				end: true
-			},
-			{
-				id: 'laqMasterData.packingMaterialCharge',
-				title: 'Packing Material Charge',
-				type: 'item',
-				icon: 'heroicons-outline:gift',
-				url: 'laq-master-data/packing-material-charge',
-				end: true
-			},
-			{
-				id: 'laqMasterData.driversDenItem',
-				title: 'DD Item Deletion Reason',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-bar',
-				url: 'laq-master-data/divers-den-item',
-				end: true
-			},
-			{
-				id: 'laqMasterData.guaranteeOptions',
-				title: 'Guarantee Options',
-				type: 'item',
-				icon: 'heroicons-outline:shield-check',
-				url: 'laq-master-data/guarantee-options',
-				end: true
-			},
-			{
-				id: 'laqMasterData.CancelOrderReasons',
-				title: 'Cancel Order Reasons',
-				type: 'item',
-				icon: 'heroicons-outline:document',
-				url: 'laq-master-data/cancel-order-reasons',
-				end: true
-			},
-			{
-				id: 'laqMasterData.UnitPriceChargeReasons',
-				title: 'Unit Price Change Reasons',
-				type: 'item',
-				icon: 'heroicons-outline:document-text',
-				url: 'laq-master-data/unit-price-charge-reasons',
-				end: true
-			}
-			// {
-			// 	id: 'laqMasterData.StorePickupOptions',
-			// 	title: 'Store Pickup Options',
-			// 	type: 'item',
-			// 	icon: 'heroicons-outline:truck',
-			// 	url: 'laq-master-data/store-pickup-options',
-			// 	end: true
-			// },
-			// {
-			// 	id: 'laqMasterData.DropshipperOrderStatus',
-			// 	title: 'Dropshipper Order Status',
-			// 	type: 'item',
-			// 	icon: 'heroicons-outline:folder-open',
-			// 	url: 'laq-master-data/dropshipper-order-status',
-			// 	end: true
-			// },
-			// {
-			// 	id: 'laqMasterData.ProductWiseDisplayPriceMargin',
-			// 	title: 'Price Markup',
-			// 	type: 'item',
-			// 	icon: 'heroicons-outline:currency-dollar',
-			// 	url: 'laq-master-data/product-wise-display-price-margin',
-			// 	end: true
-			// }
-		]
-	},
+	// {
+	// 	id: 'laqMasterData',
+	// 	title: 'LAQ master data',
+	// 	subtitle: '',
+	// 	type: 'group',
+	// 	translate: 'LAQ_MASTER_DATA',
+	// 	children: [
+	// 		{
+	// 			id: 'laqMasterData.productMaster',
+	// 			title: 'Product Master',
+	// 			type: 'collapse',
+	// 			icon: 'heroicons-outline:cube',
+	// 			children: [
+	// 				{
+	// 					id: 'laqMasterData.productMaster.ETFMasterData',
+	// 					title: 'ETF Item Master Data',
+	// 					// icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'laq-master-data/etf-master-data',
+	// 					end: true
+	// 				},
+	// 				{
+	// 					id: 'laqMasterData.productMaster.CommonProductMaster',
+	// 					title: 'Common Product Master',
+	// 					// icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'laq-master-data/common-product-master',
+	// 					end: true
+	// 				},
+	// 				{
+	// 					id: 'laqMasterData.productMaster.productMasterData',
+	// 					title: 'LAQ Item Master Data',
+	// 					// icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'laq-master-data/product-list-view',
+	// 					end: true
+	// 				},
+	// 				{
+	// 					id: 'laqMasterData.productMaster.diversDenMasterData',
+	// 					title: 'Divers Den Master Data',
+	// 					// icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'laq-master-data/divers-den-master-data',
+	// 					end: true
+	// 				},
+	//
+	// 				{
+	// 					id: 'laqMasterData.productMaster.productReviews',
+	// 					title: 'Product Reviews',
+	// 					// icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'laq-master-data/product-reviews',
+	// 					end: true
+	// 				},
+	//
+	// 				{
+	// 					id: 'laqMasterData.productMaster.allReviews',
+	// 					title: 'All Reviews',
+	// 					// icon: 'heroicons-outline:user',
+	// 					type: 'item',
+	// 					url: 'laq-master-data/all-product-reviews',
+	// 					end: true
+	// 				}
+	// 			]
+	// 		},
+	// 		{
+	// 			id: 'laqMasterData.categoryManagement',
+	// 			title: 'Category Management',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:chart-pie',
+	// 			url: 'laq-master-data/category-management',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'laqMasterData.Attribute',
+	// 			title: 'Attribute',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:presentation-chart-bar',
+	// 			url: 'laq-master-data/attribute',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'laqMasterData.packingMaterialCharge',
+	// 			title: 'Packing Material Charge',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:gift',
+	// 			url: 'laq-master-data/packing-material-charge',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'laqMasterData.driversDenItem',
+	// 			title: 'DD Item Deletion Reason',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:presentation-chart-bar',
+	// 			url: 'laq-master-data/divers-den-item',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'laqMasterData.guaranteeOptions',
+	// 			title: 'Guarantee Options',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:shield-check',
+	// 			url: 'laq-master-data/guarantee-options',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'laqMasterData.CancelOrderReasons',
+	// 			title: 'Cancel Order Reasons',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:document',
+	// 			url: 'laq-master-data/cancel-order-reasons',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'laqMasterData.UnitPriceChargeReasons',
+	// 			title: 'Unit Price Change Reasons',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:document-text',
+	// 			url: 'laq-master-data/unit-price-charge-reasons',
+	// 			end: true
+	// 		}
+	// 		// {
+	// 		// 	id: 'laqMasterData.StorePickupOptions',
+	// 		// 	title: 'Store Pickup Options',
+	// 		// 	type: 'item',
+	// 		// 	icon: 'heroicons-outline:truck',
+	// 		// 	url: 'laq-master-data/store-pickup-options',
+	// 		// 	end: true
+	// 		// },
+	// 		// {
+	// 		// 	id: 'laqMasterData.DropshipperOrderStatus',
+	// 		// 	title: 'Dropshipper Order Status',
+	// 		// 	type: 'item',
+	// 		// 	icon: 'heroicons-outline:folder-open',
+	// 		// 	url: 'laq-master-data/dropshipper-order-status',
+	// 		// 	end: true
+	// 		// },
+	// 		// {
+	// 		// 	id: 'laqMasterData.ProductWiseDisplayPriceMargin',
+	// 		// 	title: 'Price Markup',
+	// 		// 	type: 'item',
+	// 		// 	icon: 'heroicons-outline:currency-dollar',
+	// 		// 	url: 'laq-master-data/product-wise-display-price-margin',
+	// 		// 	end: true
+	// 		// }
+	// 	]
+	// },
 
 	// {
 	// 	id: 'generalAdvertisement',
@@ -589,273 +636,236 @@ const navigationConfig: FuseNavItemType[] = [
 	// 	]
 	// },
 
-	{
-		id: 'shipping',
-		title: 'Shipping',
-		subtitle: '',
-		type: 'group',
-		translate: 'SHIPPING',
-		children: [
-			{
-				id: 'shipping.holidayCalender',
-				title: 'Holiday Calender',
-				icon: 'heroicons-outline:chart-pie',
-				type: 'item',
-				url: 'shipping/holiday-calender',
-				end: true
-			},
-			{
-				id: 'shipping.schedule',
-				title: 'Shipping Schedule',
-				icon: 'heroicons-outline:calendar',
-				type: 'item',
-				url: 'shipping/shipping-schedule',
-				end: true
-			},
-			{
-				id: 'shipping.shippingMethods',
-				title: 'Shipping Methods',
-				icon: 'heroicons-outline:presentation-chart-bar',
-				type: 'item',
-				url: 'shipping/shipping-methods',
-				end: true
-			},
-			{
-				id: 'shipping.shippingTypes',
-				title: 'Shipping Types',
-				icon: 'heroicons-outline:chart-pie',
-				type: 'item',
-				url: 'shipping/shipping-types',
-				end: true
-			},
-			{
-				id: 'shipping.additionalCost',
-				title: 'Additional Cost',
-				icon: 'heroicons-outline:currency-dollar',
-				type: 'item',
-				url: 'shipping/additional-cost',
-				end: true
-			},
-			{
-				id: 'shipping.shippingHolds',
-				title: 'Shipping Holds',
-				icon: 'heroicons-outline:clock',
-				type: 'item',
-				url: 'shipping/shipping-holds',
-				end: true
-			}
-		]
-	},
+	// {
+	// 	id: 'shipping',
+	// 	title: 'Shipping',
+	// 	subtitle: '',
+	// 	type: 'group',
+	// 	translate: 'SHIPPING',
+	// 	children: [
+	// 		{
+	// 			id: 'shipping.holidayCalender',
+	// 			title: 'Holiday Calender',
+	// 			icon: 'heroicons-outline:chart-pie',
+	// 			type: 'item',
+	// 			url: 'shipping/holiday-calender',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'shipping.schedule',
+	// 			title: 'Shipping Schedule',
+	// 			icon: 'heroicons-outline:calendar',
+	// 			type: 'item',
+	// 			url: 'shipping/shipping-schedule',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'shipping.shippingMethods',
+	// 			title: 'Shipping Methods',
+	// 			icon: 'heroicons-outline:presentation-chart-bar',
+	// 			type: 'item',
+	// 			url: 'shipping/shipping-methods',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'shipping.shippingTypes',
+	// 			title: 'Shipping Types',
+	// 			icon: 'heroicons-outline:chart-pie',
+	// 			type: 'item',
+	// 			url: 'shipping/shipping-types',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'shipping.additionalCost',
+	// 			title: 'Additional Cost',
+	// 			icon: 'heroicons-outline:currency-dollar',
+	// 			type: 'item',
+	// 			url: 'shipping/additional-cost',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'shipping.shippingHolds',
+	// 			title: 'Shipping Holds',
+	// 			icon: 'heroicons-outline:clock',
+	// 			type: 'item',
+	// 			url: 'shipping/shipping-holds',
+	// 			end: true
+	// 		}
+	// 	]
+	// },
 
-	{
-		id: 'giftCertificate',
-		title: 'Gift Certificate',
-		subtitle: '',
-		type: 'group',
-		translate: 'GIFT_CERTIFICATE',
-		children: [
-			{
-				id: 'giftCertificate.giftCertificate',
-				title: 'Gift Certificate',
-				type: 'item',
-				icon: 'heroicons-outline:ticket',
-				url: '/gift-certifications/gift-certificate',
-				end: true
-			},
-			{
-				id: 'giftCertificate.codeGenerator',
-				title: 'Code Generator',
-				type: 'item',
-				icon: 'heroicons-outline:cube-transparent',
-				url: '/gift-certifications/code-generator',
-				end: true
-			},
-			{
-				id: 'giftCertificate.purchasHistory',
-				title: 'Purchase History',
-				type: 'item',
-				icon: 'heroicons-outline:cube-transparent',
-				url: '/gift-certifications/purchase-history',
-				end: true
-			}
-		]
-	},
+	// {
+	// 	id: 'giftCertificate',
+	// 	title: 'Gift Certificate',
+	// 	subtitle: '',
+	// 	type: 'group',
+	// 	translate: 'GIFT_CERTIFICATE',
+	// 	children: [
+	// 		{
+	// 			id: 'giftCertificate.giftCertificate',
+	// 			title: 'Gift Certificate',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:ticket',
+	// 			url: '/gift-certifications/gift-certificate',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'giftCertificate.codeGenerator',
+	// 			title: 'Code Generator',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:cube-transparent',
+	// 			url: '/gift-certifications/code-generator',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'giftCertificate.purchasHistory',
+	// 			title: 'Purchase History',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:cube-transparent',
+	// 			url: '/gift-certifications/purchase-history',
+	// 			end: true
+	// 		}
+	// 	]
+	// },
 
-	{
-		id: 'dashboards',
-		title: 'Dashboards',
-		subtitle: 'Unique dashboard designs',
-		type: 'group',
-		icon: 'heroicons-outline:home',
-		translate: 'DASHBOARDS',
-		children: [
-			{
-				id: 'dashboards.project',
-				title: 'Dashboard',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-line',
-				url: '/dashboards/project'
-			}
-			// {
-			// 	id: 'dashboards.analytics',
-			// 	title: 'Analytics',
-			// 	type: 'item',
-			// 	icon: 'heroicons-outline:chart-pie',
-			// 	url: '/dashboards/analytics'
-			// },
-			// {
-			// 	id: 'dashboards.finance',
-			// 	title: 'Finance',
-			// 	type: 'item',
-			// 	icon: 'heroicons-outline:cash',
-			// 	url: '/dashboards/finance'
-			// },
-			// {
-			// 	id: 'dashboards.crypto',
-			// 	title: 'Crypto',
-			// 	type: 'item',
-			// 	icon: 'heroicons-outline:currency-dollar',
-			// 	url: '/dashboards/crypto'
-			// }
-		]
-	},
-	{
-		id: 'usermanagement',
-		title: 'UserManagement',
-		subtitle: 'User Roles, Permissions, etc.',
-		type: 'group',
-		icon: 'heroicons-outline:home',
-		translate: 'USER_MANAGEMENT',
-		children: [
-			{
-				id: 'usermanagement.roles',
-				title: 'Roles',
-				type: 'item',
-				icon: 'heroicons-outline:user-group',
-				url: '/user-management/roles',
-				translate: 'ROLES'
-			},
-			{
-				id: 'usermanagement.permissions',
-				title: 'Permissions',
-				type: 'item',
-				icon: 'heroicons-outline:lock-closed',
-				url: '/user-management/permissions',
-				translate: 'PERMISSIONS'
-			},
-			{
-				id: 'usermanagement.users',
-				title: 'Users',
-				type: 'item',
-				icon: 'heroicons-outline:user',
-				url: '/user-management/users',
-				translate: 'USERS'
-			}
-		]
-	},
 
-	{
-		id: 'contentManagement',
-		title: 'ContentManagement',
-		subtitle: '',
-		type: 'group',
-		icon: 'heroicons-outline:home',
-		translate: 'CONTENT_MANAGEMENT',
-		children: [
-			{
-				id: 'contentManagement.articleCategoryContact',
-				title: 'Contact Us Subject Maintenance',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-line',
-				url: '/content-management/contact-us-subject-maintenance',
-				end: true
-			},
-			{
-				id: 'contentManagement.articleCategory',
-				title: 'Article Category',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-line',
-				url: '/content-management/article-category',
-				end: true
-			},
-			{
-				id: 'contentManagement.article',
-				title: 'Article',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-line',
-				url: '/content-management/article',
-				end: true
-			},
-			{
-				id: 'contentManagement.generalPages',
-				title: 'General Pages',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-line',
-				url: '/content-management/general-pages',
-				end: true
-			},
-			{
-				id: 'contentManagement.VideoLibrary',
-				title: 'Video Library',
-				type: 'collapse',
-				icon: 'heroicons-outline:presentation-chart-line',
-				children: [
-					{
-						id: 'contentManagement.VideoLibrary.VideoTopics',
-						title: 'Video Topics',
-						type: 'item',
-						url: '/content-management/video-topic',
-						end: true
-					},
-					{
-						id: 'contentManagement.VideoLibrary.VideoLibrary',
-						title: 'Video Library',
-						type: 'item',
-						url: '/content-management/video-library',
-						end: true
-					}
-				]
-			},
-			{
-				id: 'contentManagement.ComponentsTypes',
-				title: 'Component Layouts',
-				type: 'collapse',
-				icon: 'heroicons-outline:presentation-chart-line',
-				children: [
-					{
-						id: 'contentManagement.ComponentsTypes.textEditorComponent',
-						title: 'Text Editor Component',
-						type: 'item',
-						url: '/content-management/components-layouts/text-editor-component',
-						end: true
-					},
-					{
-						id: 'contentManagement.ComponentsTypes.productCarouselComponent',
-						title: 'Product Carousel Component',
-						type: 'item',
-						url: '/content-management/components-layouts/product-carousel-component',
-						end: true
-					}
-				]
-			},
-			{
-				id: 'contentManagement.headerLayout',
-				title: 'Header Layout',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-line',
-				url: '/content-management/header-layout',
-				end: true
-			},
-			{
-				id: 'contentManagement.footerLayout',
-				title: 'Footer Layout',
-				type: 'item',
-				icon: 'heroicons-outline:presentation-chart-line',
-				url: '/content-management/footer-layout',
-				end: true
-			}
-		]
-	}
+	// {
+	// 	id: 'usermanagement',
+	// 	title: 'UserManagement',
+	// 	subtitle: 'User Roles, Permissions, etc.',
+	// 	type: 'group',
+	// 	icon: 'heroicons-outline:home',
+	// 	translate: 'USER_MANAGEMENT',
+	// 	children: [
+	// 		{
+	// 			id: 'usermanagement.roles',
+	// 			title: 'Roles',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:user-group',
+	// 			url: '/user-management/roles',
+	// 			translate: 'ROLES'
+	// 		},
+	// 		{
+	// 			id: 'usermanagement.permissions',
+	// 			title: 'Permissions',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:lock-closed',
+	// 			url: '/user-management/permissions',
+	// 			translate: 'PERMISSIONS'
+	// 		},
+	// 		{
+	// 			id: 'usermanagement.users',
+	// 			title: 'Users',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:user',
+	// 			url: '/user-management/users',
+	// 			translate: 'USERS'
+	// 		}
+	// 	]
+	// },
+
+	// {
+	// 	id: 'contentManagement',
+	// 	title: 'ContentManagement',
+	// 	subtitle: '',
+	// 	type: 'group',
+	// 	icon: 'heroicons-outline:home',
+	// 	translate: 'CONTENT_MANAGEMENT',
+	// 	children: [
+	// 		{
+	// 			id: 'contentManagement.articleCategoryContact',
+	// 			title: 'Contact Us Subject Maintenance',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:presentation-chart-line',
+	// 			url: '/content-management/contact-us-subject-maintenance',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'contentManagement.articleCategory',
+	// 			title: 'Article Category',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:presentation-chart-line',
+	// 			url: '/content-management/article-category',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'contentManagement.article',
+	// 			title: 'Article',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:presentation-chart-line',
+	// 			url: '/content-management/article',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'contentManagement.generalPages',
+	// 			title: 'General Pages',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:presentation-chart-line',
+	// 			url: '/content-management/general-pages',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'contentManagement.VideoLibrary',
+	// 			title: 'Video Library',
+	// 			type: 'collapse',
+	// 			icon: 'heroicons-outline:presentation-chart-line',
+	// 			children: [
+	// 				{
+	// 					id: 'contentManagement.VideoLibrary.VideoTopics',
+	// 					title: 'Video Topics',
+	// 					type: 'item',
+	// 					url: '/content-management/video-topic',
+	// 					end: true
+	// 				},
+	// 				{
+	// 					id: 'contentManagement.VideoLibrary.VideoLibrary',
+	// 					title: 'Video Library',
+	// 					type: 'item',
+	// 					url: '/content-management/video-library',
+	// 					end: true
+	// 				}
+	// 			]
+	// 		},
+	// 		{
+	// 			id: 'contentManagement.ComponentsTypes',
+	// 			title: 'Component Layouts',
+	// 			type: 'collapse',
+	// 			icon: 'heroicons-outline:presentation-chart-line',
+	// 			children: [
+	// 				{
+	// 					id: 'contentManagement.ComponentsTypes.textEditorComponent',
+	// 					title: 'Text Editor Component',
+	// 					type: 'item',
+	// 					url: '/content-management/components-layouts/text-editor-component',
+	// 					end: true
+	// 				},
+	// 				{
+	// 					id: 'contentManagement.ComponentsTypes.productCarouselComponent',
+	// 					title: 'Product Carousel Component',
+	// 					type: 'item',
+	// 					url: '/content-management/components-layouts/product-carousel-component',
+	// 					end: true
+	// 				}
+	// 			]
+	// 		},
+	// 		{
+	// 			id: 'contentManagement.headerLayout',
+	// 			title: 'Header Layout',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:presentation-chart-line',
+	// 			url: '/content-management/header-layout',
+	// 			end: true
+	// 		},
+	// 		{
+	// 			id: 'contentManagement.footerLayout',
+	// 			title: 'Footer Layout',
+	// 			type: 'item',
+	// 			icon: 'heroicons-outline:presentation-chart-line',
+	// 			url: '/content-management/footer-layout',
+	// 			end: true
+	// 		}
+	// 	]
+	// }
 
 	// {
 	// 	id: 'ticketmanagement',

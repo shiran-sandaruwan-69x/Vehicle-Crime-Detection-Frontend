@@ -201,12 +201,12 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 					);
 
 					const { data, token, permissions } = response.data;
-		
+
 					const tempData: Partial<User> = {
 						uid: 'XgbuVEXBU5gtSKdbQRP1Zbbby1i1',
 						role: 'admin',
 						data: {
-							displayName: 'Live Aquaria Admin',
+							displayName: 'Crime Vision Admin',
 							photoURL: 'assets/images/avatars/demo-admin.png',
 							email: 'admin@nlb.com',
 							settings: {
@@ -283,7 +283,7 @@ function JwtAuthProvider(props: JwtAuthProviderProps) {
 				uid: 'XgbuVEXBU5gtSKdbQRP1Zbbby1i1',
 				role: 'admin',
 				data: {
-					displayName: 'Live Aquaria Admin',
+					displayName: 'Crime Vision Admin',
 					photoURL: 'assets/images/avatars/demo-admin.png',
 					email: 'admin@nlb.com',
 					settings: {

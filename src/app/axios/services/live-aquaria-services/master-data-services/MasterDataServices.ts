@@ -1,26 +1,45 @@
 import { del, get, post, put } from '../../../http/LiveAquariaServiceMethods';
 import * as url from '../url_helper';
+import {
+	GET_ALL_ATTRIBUTE_LIST_PAGINATION,
+	GET_ALL_BOX_CHARGE,
+	GET_ALL_REPORT,
+	GET_ALL_VEHICLE_SEARCH,
+	GET_ALL_VEHICLES
+} from "../url_helper";
 
 const MASTER_DATA_BASE_URL: string = import.meta.env.VITE_BASE_URL_SERVICE as string;
 export const getAllProductList = (pageNo, pageSize) =>
 	get(`${url.GET_ALL_PRODUCT_LIST}limit=${pageSize}&page=${pageNo}`);
 export const getAllAttributeList = () => get(url.GET_ALL_ATTRIBUTE_LIST);
-export const getAllAttributeListWithPagination = (pageNo, pageSize) =>
-	get(`${url.GET_ALL_ATTRIBUTE_LIST_PAGINATION}limit=${pageSize}&page=${pageNo}`);
+export const getAllAttributeListWithPagination = () =>
+	get(`${url.GET_ALL_ATTRIBUTE_LIST_PAGINATION}`);
 export const updateProductAttribute = (productId, data) => put(url.UPDATE_PRODUCT_ATTRIBUTE + productId, data);
 export const updateProductVariety = (productId, data) => put(url.UPDATE_PRODUCT_ATTRIBUTE + productId, data);
 export const getProduct = (productId) => get(url.UPDATE_PRODUCT_ATTRIBUTE + productId);
 
 export const createAttribute = (data) => post(url.CREATE_ATTRIBUTE, data);
-export const updateAttribute = (data, attributeId) => put(url.UPDATE_ATTRIBUTE + attributeId, data);
-
-export const getAllBoxCharge = (pageNo, pageSize) => get(`${url.GET_ALL_BOX_CHARGE}limit=${pageSize}&page=${pageNo}`);
-export const getAllCancelOrderReasons = (pageNo, pageSize) =>
-	get(`${url.GET_ALL_CANCEL_ORDER_REASON}limit=${pageSize}&page=${pageNo}`);
+export const updateAttribute = (data, attributeId) => put(`${url.CREATE_CANCEL_ORDER_REASON}/${attributeId}`, data);
+export const updateAlertyType = (data, attributeId) => put(`${url.GET_ALL_BOX_CHARGE}/${attributeId}`, data);
+export const updateSystemAlertyType = (data, attributeId) => put(`${url.GET_ALL_CANCEL_ORDER_REASON}/${attributeId}`, data);
+export const getAllBoxCharge = () => get(`${url.GET_ALL_BOX_CHARGE}`);
+export const getAllVehi = () => get(`${url.GET_ALL_VEHICLES}`);
+export const getAllReports = () => get(`${url.GET_ALL_REPORT}`);
+export const getAllVehiId = (vehicleId) => get(`${url.GET_ALL_VEHICLES}/${vehicleId}`);
+export const getAllReportId = (vehicleId) => get(`${url.GET_ALL_REPORT}/${vehicleId}`);
+export const getAllVehiSearchId = (vehicleId) => get(`${url.GET_ALL_VEHICLE_SEARCH}?vehicleNo=${vehicleId}`);
+export const getData1 = () => get(`${url.GET_ALL_VEHICLES}`);
+export const getAllCancelOrderReasons = () =>
+	get(`${url.GET_ALL_CANCEL_ORDER_REASON}`);
 
 export const updateOrderReason = (data, reasonId) => put(url.UPDATE_CANCEL_ORDER_REASON + reasonId, data);
 
-export const createOrderReason = (data) => post(url.CREATE_CANCEL_ORDER_REASON, data);
+export const createOrderReason = (data) => post(url.GET_ALL_BOX_CHARGE, data);
+export const createOrderReason2 = (data) => post(url.GET_ALL_ATTRIBUTE_LIST_PAGINATION, data);
+export const createOrderReason3 = (data) => post(url.GET_ALL_CANCEL_ORDER_REASON, data);
+export const createOrderReason4 = (data) => post(url.GET_ALL_VEHICLES, data);
+export const createOrderReason6 = (data) => post(url.GET_ALL_REPORT, data);
+export const createOrderReason5 = (data,id) => put(`${url.GET_ALL_VEHICLES}/${id}`, data);
 
 export const deleteOrderReason = (reasonId) => del(url.UPDATE_CANCEL_ORDER_REASON + reasonId);
 export const getAllUnitPriceCharge = (pageNo, pageSize) =>

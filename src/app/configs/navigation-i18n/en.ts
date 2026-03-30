@@ -33,7 +33,10 @@ const locale = {
 	CUSTOMER_SERVICE: 'Customer Service',
 	CONTENT_MANAGEMENT: 'Content Management',
 	SYSTEM_SETTINGS: 'System Settings',
-	PDP_MANAGEMENT: 'PDP Management'
+	PDP_MANAGEMENT: 'PDP Management',
+	CASE_REPORT: 'Case Report',
+	VEHICLES: 'Vehicles',
+	MASTER_DATA: 'Master Data'
 };
 
 export default locale;

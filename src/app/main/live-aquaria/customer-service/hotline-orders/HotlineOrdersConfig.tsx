@@ -9,6 +9,7 @@ i18next.addResourceBundle('si', 'hotlineOrders', si);
 i18next.addResourceBundle('ta', 'hotlineOrders', ta);
 
 const HotlineOtrdersComponent = lazy(() => import('./HotlineOrders'));
+const CaseReportForm = lazy(() => import('./components/CaseReportForm'));
 
 const HotlineOrderConfig = {
 	settings: {
@@ -17,8 +18,12 @@ const HotlineOrderConfig = {
 	permission: 'HOTLINE_ORDERS',
 	routes: [
 		{
-			path: 'customer-service/hotline-orders',
+			path: 'report/generate-case-report',
 			element: <HotlineOtrdersComponent />
+		},
+		{
+			path: 'report/generate-case-report/details',
+			element: <CaseReportForm />
 		}
 	]
 };

@@ -60,7 +60,7 @@ const locale = {
 	CONFIRM_MESSAGE: 'Are you sure you want to update this status ?',
 	CANCEL: 'Cancel',
 	CONFIRM: 'Confirm',
-	DEFAULT: 'Live Aquaria',
+	DEFAULT: 'Crime Vision',
 	EDIT_GENERAL_ADVERTISEMENT: 'Edit General Advertisement',
 	CREATE_GENERAL_ADVERTISEMENT: 'Create General Advertisement',
 	VIEW_GENERAL_ADVERTISEMENT: 'View General Advertisement',

@@ -25,7 +25,7 @@ function FormPhoneNumberField({ name, id, onChange, ...props }) {
       <MuiPhoneNumber
         {...field}
         {...props}
-        defaultCountry='us'
+        defaultCountry='lk'
         onChange={handleOnChange}
         className='max-h-[40px!important]'
         fullWidth

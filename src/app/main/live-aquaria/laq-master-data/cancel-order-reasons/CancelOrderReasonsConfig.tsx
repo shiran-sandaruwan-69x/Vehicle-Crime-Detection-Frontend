@@ -17,7 +17,7 @@ const GuaranteeOptionsConfig = {
 	permission: 'LAQ_MASTER_DATA',
 	routes: [
 		{
-			path: 'laq-master-data/cancel-order-reasons',
+			path: 'masterData/system-alert-priority',
 			element: <CancelOrderReasons />
 		}
 	]

@@ -4,7 +4,7 @@ export const GET_USER_ROLES = `${ADMIN_BASE_URL}/api/roles`;
 export const SAVE_ADMIN_ROLE = `${ADMIN_BASE_URL}/api/role/save`;
 export const UPDATE_ADMIN_ROLE = `${ADMIN_BASE_URL}/api/role/update`;
 
-export const GET_ADMIN_USERS = `${ADMIN_BASE_URL}/api/admin/v1/admins`;
+export const GET_ADMIN_USERS = `${ADMIN_BASE_URL}/api/users`;
 
 export const GET_PERMISSIONS_BY_ID = `${ADMIN_BASE_URL}/api/role`;
 export const UPDATE_PERMISSIONS = `${ADMIN_BASE_URL}/api/admin/v1/permissions/`;

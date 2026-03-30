@@ -78,7 +78,7 @@ function DiversDenAdvertisementPublishBreadCrumb() {
 	};
 
 	const renderBreadcrumbs = () => {
-		const breadcrumbs = [{ label: t('Live Aquaria'), tab: 'SAMPLE_TAB_ONE' }];
+		const breadcrumbs = [{ label: t('Crime Vision'), tab: 'SAMPLE_TAB_ONE' }];
 
 		breadcrumbs.push({
 			label: 'Diver\'s Den Management Publish',

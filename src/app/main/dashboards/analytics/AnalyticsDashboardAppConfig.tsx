@@ -12,7 +12,7 @@ const AnalyticsDashboardAppConfig = {
 	},
 	routes: [
 		{
-			path: 'dashboards/analytics',
+			path: 'dashboards/operation',
 			element: <AnalyticsDashboardApp />
 		}
 	]

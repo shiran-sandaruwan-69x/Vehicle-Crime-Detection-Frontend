@@ -17,7 +17,7 @@ const AttributeConfig = {
 	permission: 'LAQ_MASTER_DATA',
 	routes: [
 		{
-			path: 'laq-master-data/attribute',
+			path: 'masterData/counties',
 			element: <Attribute />
 		}
 	]

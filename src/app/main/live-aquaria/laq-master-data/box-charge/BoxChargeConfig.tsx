@@ -17,7 +17,7 @@ const BoxChargeConfig = {
 	permission: 'LAQ_MASTER_DATA',
 	routes: [
 		{
-			path: 'laq-master-data/packing-material-charge',
+			path: 'masterData/alert-type',
 			element: <BoxCharge />
 		}
 	]

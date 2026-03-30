@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import {
-	createOrderReason,
+	createOrderReason, createOrderReason3,
 	deleteOrderReason,
 	getAllCancelOrderReasons,
 	updateOrderReason
@@ -60,54 +60,34 @@ function CancelOrderReasons() {
 
 	useEffect(() => {
 		getCancelOrderReasons();
-	}, [pageNo, pageSize]);
+	}, []);
 
 	const tableColumns = [
 		{
-			title: t('ID'),
-			field: 'id'
+			title: t('System Alert Priority'),
+			field: 'systemAlertPriority'
 		},
 		{
-			title: t('REASON'),
-			field: 'reason'
+			title: t('System Alert Priority Code'),
+			field: 'systemAlertPriorityCode'
 		},
 		{
 			title: t('ACTIVE'),
-			field: 'active',
-			render: (rowData: ReasonModifiedData, index) => (
-				<FormGroup>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={rowData.active}
-								onChange={handleSwitchChange(rowData.id, rowData)}
-								aria-label="login switch"
-								size="small"
-								sx={{
-									'& .muiltr-kpgjex-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track':
-										{
-											backgroundColor: '#387ed4'
-										}
-								}}
-							/>
-						}
-						label=""
-					/>
-				</FormGroup>
-			)
+			field: 'is_active',
+			render: (rowData: any) => {
+				return rowData.is_active === 1 ? 'Active' : 'Inactive';
+			}
 		}
 	];
 
 	const getCancelOrderReasons = async () => {
 		setTableLoading(true);
 		try {
-			const response: ReasonType = await getAllCancelOrderReasons(pageNo, pageSize);
-			setCount(response.meta.total);
-			const data1: Reason[] = response.data;
-			const modifiedData: ReasonModifiedData[] = data1.map((item: Reason) => ({
-				id: item.id,
-				reason: item.reason,
-				active: item.is_active === 1
+			const response: any = await getAllCancelOrderReasons();
+			const data1: any[] = response;
+			const modifiedData: ReasonModifiedData[] = data1.map((item: any) => ({
+				...item,
+				is_active: item?.status == true ? 1 : 0,
 			}));
 			setTableData(modifiedData);
 			setTableLoading(false);
@@ -141,18 +121,20 @@ function CancelOrderReasons() {
 	};
 
 	const schema = yup.object().shape({
-		cancelReason: yup.string().required(t('Cancel order reason is required'))
+		systemAlertPriority: yup.string().required(t('System Alert Priority is required')),
+		systemAlertPriorityCode: yup.string().required(t('System Alert Priority Code is required'))
 	});
 
-	const onSubmit = async (values: ReasonCreateData, formikHelpers: FormikHelpers<ReasonCreateData>) => {
+	const onSubmit = async (values: any, formikHelpers: FormikHelpers<ReasonCreateData>) => {
 		const { resetForm } = formikHelpers;
 		setCancelOrderReasonsDataLoading(true);
 		const requestData = {
-			reason: values.cancelReason ? values.cancelReason : '',
-			is_active: 1
+			systemAlertPriority: values.systemAlertPriority ? values.systemAlertPriority : '',
+			systemAlertPriorityCode: values.systemAlertPriorityCode ? values.systemAlertPriorityCode : '',
+			status: 1
 		};
 		try {
-			const response = await createOrderReason(requestData);
+			const response = await createOrderReason3(requestData);
 			getCancelOrderReasons();
 			setCancelOrderReasonsDataLoading(false);
 			toast.success('Created Successfully');
@@ -244,10 +226,11 @@ function CancelOrderReasons() {
 
 	return (
 		<div className="min-w-full max-w-[100vw]">
-			<NavigationViewComp title="Cancel Order Reasons" />
+			<NavigationViewComp title="Master Data / System Alert Priority" />
 			<Formik
 				initialValues={{
-					cancelReason: ''
+					systemAlertPriority: '',
+					systemAlertPriorityCode: '',
 				}}
 				validationSchema={schema}
 				onSubmit={onSubmit}
@@ -268,12 +251,12 @@ function CancelOrderReasons() {
 								className="formikFormField pt-[5px!important]"
 							>
 								<Typography className="formTypography">
-									{t('Cancel Order Reason')}
+									{t('System Alert Priority')}
 									<span className="text-red"> *</span>
 								</Typography>
 								<Field
 									disabled={false}
-									name="cancelReason"
+									name="systemAlertPriority"
 									placeholder={t('')}
 									component={TextFormField}
 									fullWidth
@@ -285,8 +268,30 @@ function CancelOrderReasons() {
 								item
 								xs={12}
 								sm={6}
-								md={8}
-								lg={9}
+								md={4}
+								lg={3}
+								className="formikFormField pt-[5px!important]"
+							>
+								<Typography className="formTypography">
+									{t('System Alert Priority Code')}
+									<span className="text-red"> *</span>
+								</Typography>
+								<Field
+									disabled={false}
+									name="systemAlertPriorityCode"
+									placeholder={t('')}
+									component={TextFormField}
+									fullWidth
+									size="small"
+								/>
+							</Grid>
+
+							<Grid
+								item
+								xs={12}
+								sm={6}
+								md={6}
+								lg={6}
 								className="flex items-start gap-[10px] formikFormField pt-[26px!important]"
 							>
 								<Button
@@ -359,7 +364,7 @@ function CancelOrderReasons() {
 						records={tableData}
 						tableRowViewHandler={tableRowViewHandler}
 						tableRowEditHandler={tableRowEditHandler}
-						tableRowDeleteHandler={tableRowDeleteHandler}
+						//tableRowDeleteHandler={tableRowDeleteHandler}
 						disableSearch={false}
 					/>
 				</Grid>

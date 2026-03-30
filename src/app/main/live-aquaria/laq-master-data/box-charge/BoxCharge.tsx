@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import {Button, CircularProgress} from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Grid from '@mui/material/Grid';
@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import {
+	createOrderReason,
 	deleteBoxCharge,
 	getAllBoxCharge,
 	updateBoxCharge
@@ -21,6 +22,11 @@ import {
 import BoxChargeActiveAlertForm from './components/BoxChargeActiveAlertForm';
 import BoxChargeDeleteAlertForm from './components/BoxChargeDeleteAlertForm';
 import NewBoxChargeDialogForm from './components/NewBoxChargeDialogForm';
+import {Field, Form, Formik, FormikHelpers} from "formik";
+import Typography from "@mui/material/Typography";
+import TextFormField from "../../../../common/FormComponents/FormTextField";
+import {ReasonCreateData} from "../cancel-order-reasons/cancel-order-reason-types/CancelOrderReasonTypes";
+import * as yup from "yup";
 
 interface ErrorResponse {
 	response?: {
@@ -38,6 +44,7 @@ function BoxCharge() {
 	const [isTableLoading, setTableLoading] = useState(false);
 	const [tableData, setTableData] = useState([]);
 	const [tableRowData, setTableRowData] = useState({});
+	const [isCancelOrderReasonsDataLoading, setCancelOrderReasonsDataLoading] = useState(false);
 	const [tableViewRowData, setViewTableRowData] = useState({});
 	const [tableEditRowData, setEditTableRowData] = useState({});
 	const [tableActiveRowData, setActiveTableRowData] = useState({} as ModifiedPackingMaterialData);
@@ -55,67 +62,34 @@ function BoxCharge() {
 
 	useEffect(() => {
 		getBoxCharge();
-	}, [pageNo, pageSize]);
+	}, []);
 
 	const tableColumns = [
 		{
-			title: t('Name'),
-			field: 'boxChargeName'
+			title: t('Alert Type'),
+			field: 'alertType'
 		},
 		{
-			title: t('TYPE'),
-			field: 'type'
-		},
-		{
-			title: t('PRICE'),
-			field: 'price',
-			render: (rowData: ModifiedPackingMaterialData) =>
-				rowData?.price
-					? Number(rowData?.price).toLocaleString('en-US', {
-							minimumFractionDigits: 2,
-							maximumFractionDigits: 2
-						})
-					: ''
+			title: t('Alert Type Code'),
+			field: 'alertTypeCode'
 		},
 		{
 			title: t('ACTIVE'),
-			field: 'active',
-			render: (rowData: ModifiedPackingMaterialData, index) => (
-				<FormGroup>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={rowData.active}
-								onChange={handleSwitchChange(rowData.id, rowData)}
-								aria-label="login switch"
-								size="small"
-								sx={{
-									'& .muiltr-kpgjex-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track':
-										{
-											backgroundColor: '#387ed4'
-										}
-								}}
-							/>
-						}
-						label=""
-					/>
-				</FormGroup>
-			)
+			field: 'is_active',
+			render: (rowData: any) => {
+				return rowData.is_active === 1 ? 'Active' : 'Inactive';
+			}
 		}
 	];
 
 	const getBoxCharge = async () => {
 		setTableLoading(true);
 		try {
-			const response: PackingMaterialType = await getAllBoxCharge(pageNo, pageSize);
-			setCount(response.meta.total);
-			const data1: PackingMaterialData[] = response.data;
-			const modifiedData: ModifiedPackingMaterialData[] = data1.map((item: PackingMaterialData) => ({
+			const response: any = await getAllBoxCharge();
+			const data1: any[] = response;
+			const modifiedData: ModifiedPackingMaterialData[] = data1.map((item: any) => ({
 				...item,
-				boxChargeName: item.name,
-				type: item.packing_type_name,
-				price: item.charge ? item.charge : item.unit_price,
-				active: item.is_active === 1
+				is_active: item?.status == true ? 1 : 0,
 			}));
 			setTableData(modifiedData);
 			setTableLoading(false);
@@ -221,31 +195,144 @@ function BoxCharge() {
 		}
 	};
 
+	const onSubmit = async (values: any, formikHelpers: FormikHelpers<ReasonCreateData>) => {
+		const { resetForm } = formikHelpers;
+		setCancelOrderReasonsDataLoading(true);
+		const requestData = {
+			alertType: values.alertType ? values.alertType : '',
+			alertTypeCode: values.alertTypeCode ? values.alertTypeCode : '',
+			status: 1
+		};
+		try {
+			const response = await createOrderReason(requestData);
+			getBoxCharge();
+			setCancelOrderReasonsDataLoading(false);
+			toast.success('Created Successfully');
+			resetForm();
+		} catch (error) {
+			setCancelOrderReasonsDataLoading(false);
+			const isErrorResponse = (error: unknown): error is ErrorResponse => {
+				return typeof error === 'object' && error !== null && 'response' in error;
+			};
+
+			if (isErrorResponse(error) && error.response?.data?.message) {
+				toast.error(error.response.data.message);
+			} else {
+				toast.error('Internal server error');
+			}
+		}
+	};
+
+	const handleClearForm = (resetForm: FormikHelpers<ReasonCreateData>['resetForm']) => {
+		resetForm();
+	};
+
+	const schema = yup.object().shape({
+		alertType: yup.string().required(t('Alert Type is required')),
+		alertTypeCode: yup.string().required(t('Alert Type Code is required'))
+	});
+
 	return (
 		<div className="min-w-full max-w-[100vw]">
-			<NavigationViewComp title="Packing Material Charge" />
-			<Grid
-				container
-				spacing={2}
-				className="pt-[10px] pr-[30px] mx-auto"
+			<NavigationViewComp title="Master Data / Alert Type" />
+			<Formik
+				initialValues={{
+					alertType: '',
+					alertTypeCode: '',
+				}}
+				validationSchema={schema}
+				onSubmit={onSubmit}
 			>
-				<Grid
-					item
-					xs={12}
-					className="flex justify-end items-center gap-[10px] pt-[5px!important]"
-				>
-					<Button
-						className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-white font-500 py-0 rounded-[6px] bg-primaryBlue hover:bg-primaryBlue/80"
-						type="button"
-						variant="contained"
-						size="medium"
-						disabled={false}
-						onClick={handleOpenNewAttributeModal}
-					>
-						{t('Create New Material')}
-					</Button>
-				</Grid>
-			</Grid>
+				{({ values, setFieldValue, isValid, resetForm }) => (
+					<Form>
+						<Grid
+							container
+							spacing={2}
+							className="pt-[10px] pr-[30px] mx-auto"
+						>
+							<Grid
+								item
+								xs={12}
+								sm={6}
+								md={4}
+								lg={3}
+								className="formikFormField pt-[5px!important]"
+							>
+								<Typography className="formTypography">
+									{t('Alert Type')}
+									<span className="text-red"> *</span>
+								</Typography>
+								<Field
+									disabled={false}
+									name="alertType"
+									placeholder={t('')}
+									component={TextFormField}
+									fullWidth
+									size="small"
+								/>
+							</Grid>
+
+							<Grid
+								item
+								xs={12}
+								sm={6}
+								md={4}
+								lg={3}
+								className="formikFormField pt-[5px!important]"
+							>
+								<Typography className="formTypography">
+									{t('Alert Type Code')}
+									<span className="text-red"> *</span>
+								</Typography>
+								<Field
+									disabled={false}
+									name="alertTypeCode"
+									placeholder={t('')}
+									component={TextFormField}
+									fullWidth
+									size="small"
+								/>
+							</Grid>
+
+							<Grid
+								item
+								xs={12}
+								sm={6}
+								md={6}
+								lg={6}
+								className="flex items-start gap-[10px] formikFormField pt-[26px!important]"
+							>
+								<Button
+									className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-white font-500 py-0 rounded-[6px] bg-primaryBlue hover:bg-primaryBlue/80"
+									type="submit"
+									variant="contained"
+									size="medium"
+									disabled={false}
+								>
+									{t('Save')}
+									{isCancelOrderReasonsDataLoading ? (
+										<CircularProgress
+											className="text-white ml-[5px]"
+											size={24}
+										/>
+									) : null}
+								</Button>
+
+								<Button
+									className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-gray-600 font-500 py-0 rounded-[6px] bg-gray-300 hover:bg-gray-300/80"
+									type="button"
+									variant="contained"
+									size="medium"
+									disabled={false}
+									onClick={() => handleClearForm(resetForm)}
+								>
+									{t('Reset')}
+								</Button>
+							</Grid>
+						</Grid>
+					</Form>
+				)}
+			</Formik>
 
 			<Grid
 				container
@@ -270,7 +357,7 @@ function BoxCharge() {
 						pageIndex={pageNo}
 						setPageSize={setPageSize}
 						searchByText=""
-						loading={isTableLoading}
+						//loading={isTableLoading}
 						count={count}
 						exportToExcel={null}
 						handleRowDeleteAction={null}
@@ -283,7 +370,7 @@ function BoxCharge() {
 						records={tableData}
 						tableRowViewHandler={tableRowViewHandler}
 						tableRowEditHandler={tableRowEditHandler}
-						tableRowDeleteHandler={tableRowDeleteHandler}
+						//tableRowDeleteHandler={tableRowDeleteHandler}
 						disableSearch={false}
 					/>
 				</Grid>

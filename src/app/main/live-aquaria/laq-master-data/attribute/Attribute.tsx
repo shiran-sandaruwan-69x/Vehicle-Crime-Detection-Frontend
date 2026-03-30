@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import {Button, CircularProgress} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { toast } from 'react-toastify';
-import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
+import {Field, Form, Formik, FormikHelpers, FormikProps} from 'formik';
 import Typography from '@mui/material/Typography';
 import * as yup from 'yup';
 import useDebounce from 'app/shared-components/useDebounce';
@@ -14,6 +14,7 @@ import MaterialTableWrapper from '../../../../common/tableComponents/MaterialTab
 import NewAttributeDialogForm from './components/NewAttributeDialogForm';
 import ViewAttributeDialogForm from './components/ViewAttributeDialogForm';
 import {
+	createOrderReason, createOrderReason2,
 	getAllAdvanceFilteringItemAttributesDataWithPagination,
 	getAllAttributeListWithPagination,
 	updateAttribute
@@ -27,6 +28,8 @@ import {
 import NavigationViewComp from '../../../../common/FormComponents/NavigationViewComp';
 import NewAttributeActiveDialogForm from './components/NewAttributeActiveDialogForm';
 import CustomFormTextField from '../../../../common/FormComponents/CustomFormTextField';
+import TextFormField from "../../../../common/FormComponents/FormTextField";
+import {ReasonCreateData} from "../cancel-order-reasons/cancel-order-reason-types/CancelOrderReasonTypes";
 interface ErrorResponse {
 	response?: {
 		data?: {
@@ -61,26 +64,16 @@ function Attribute() {
 	const debouncedFilter = useDebounce<AttributeSearchSubmitData>(filteredValues, 1000);
 
 	useEffect(() => {
-		if (debouncedFilter) changePageNoOrPageSize(filteredValues);
-	}, [debouncedFilter]);
-
-	useEffect(() => {
-		changePageNoOrPageSize(filteredValues);
-	}, [pageNo, pageSize]);
+		getAllAttributes();
+	}, []);
 
 	const getAllAttributes = async () => {
 		setTableLoading(true);
 		try {
-			const response: AttributeType = await getAllAttributeListWithPagination(pageNo, pageSize);
-			setCount(response.meta.total);
-			const mapperData: MappedAttribute[] = response.data.map((attribute: OneAttributeType) => ({
+			const response: any = await getAllAttributeListWithPagination();
+			const mapperData: any = response.map((attribute: any) => ({
 				...attribute,
-				attribute: attribute.name,
-				values: attribute.item_attribute.map((item) => ({
-					valId: item.id,
-					value: item.name
-				})),
-				active: attribute.is_active === 1
+				is_active: attribute?.status == true ? 1 : 0,
 			}));
 			setTableData(mapperData);
 			setTableLoading(false);
@@ -100,38 +93,19 @@ function Attribute() {
 
 	const tableColumns = [
 		{
-			title: t('ATTRIBUTE'),
-			field: 'attribute'
+			title: t('Country Name'),
+			field: 'counties'
 		},
 		{
-			title: t('VALUES'),
-			field: 'values',
-			render: (rowData: MappedAttribute) => rowData.values.map((item) => item.value).join(', ')
+			title: t('Country Code'),
+			field: 'countryCode'
 		},
 		{
 			title: t('ACTIVE'),
-			field: 'active',
-			render: (rowData: MappedAttribute, index) => (
-				<FormGroup>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={rowData.active}
-								onChange={handleSwitchChange(rowData.id, rowData)}
-								aria-label="login switch"
-								size="small"
-								sx={{
-									'& .muiltr-kpgjex-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track':
-										{
-											backgroundColor: '#387ed4'
-										}
-								}}
-							/>
-						}
-						label=""
-					/>
-				</FormGroup>
-			)
+			field: 'is_active',
+			render: (rowData: any) => {
+				return rowData.is_active === 1 ? 'Active' : 'Inactive';
+			}
 		}
 	];
 
@@ -155,7 +129,7 @@ function Attribute() {
 		toggleViewCategoryModal();
 	};
 
-	const tableRowEditHandler = (rowData: MappedAttribute) => {
+	const tableRowEditHandler = (rowData: any) => {
 		setTableEditRowData(rowData);
 		toggleEditCategoryModal();
 	};
@@ -193,8 +167,6 @@ function Attribute() {
 			}
 		}
 	};
-
-	const schema = yup.object().shape({});
 
 	const changePageNoOrPageSize = async (filteredValues: AttributeSearchSubmitData) => {
 		setTableLoading(true);
@@ -238,23 +210,54 @@ function Attribute() {
 		});
 	};
 
-	const handleClearForm = (resetForm: FormikHelpers<AttributeSearchSubmitData>['resetForm']) => {
-		resetForm();
-		setFilteredValues({
-			attributesName: null
-		});
+	const [isCancelOrderReasonsDataLoading, setCancelOrderReasonsDataLoading] = useState(false);
+	const onSubmit = async (values: any, formikHelpers: FormikHelpers<ReasonCreateData>) => {
+		const { resetForm } = formikHelpers;
+		setCancelOrderReasonsDataLoading(true);
+		const requestData = {
+			counties: values.counties ? values.counties : '',
+			countryCode: values.countryCode ? values.countryCode : '',
+			status: 1
+		};
+		try {
+			const response = await createOrderReason2(requestData);
+			getAllAttributes();
+			setCancelOrderReasonsDataLoading(false);
+			toast.success('Created Successfully');
+			resetForm();
+		} catch (error) {
+			setCancelOrderReasonsDataLoading(false);
+			const isErrorResponse = (error: unknown): error is ErrorResponse => {
+				return typeof error === 'object' && error !== null && 'response' in error;
+			};
+
+			if (isErrorResponse(error) && error.response?.data?.message) {
+				toast.error(error.response.data.message);
+			} else {
+				toast.error('Internal server error');
+			}
+		}
 	};
+
+	const handleClearForm = (resetForm: FormikHelpers<ReasonCreateData>['resetForm']) => {
+		resetForm();
+	};
+
+	const schema = yup.object().shape({
+		counties: yup.string().required(t('Country is required')),
+		countryCode: yup.string().required(t('Country Code is required'))
+	});
 
 	return (
 		<div className="min-w-full max-w-[100vw]">
-			<NavigationViewComp title="Attribute" />
-
+			<NavigationViewComp title="Master Data / Counties" />
 			<Formik
 				initialValues={{
-					attributesName: ''
+					counties: '',
+					countryCode: '',
 				}}
 				validationSchema={schema}
-				onSubmit={(values: AttributeSearchSubmitData) => {}}
+				onSubmit={onSubmit}
 			>
 				{({ values, setFieldValue, isValid, resetForm }) => (
 					<Form>
@@ -271,14 +274,17 @@ function Attribute() {
 								lg={3}
 								className="formikFormField pt-[5px!important]"
 							>
-								<Typography className="formTypography">{t('Attribute Name')}</Typography>
-								<CustomFormTextField
-									name="attributesName"
-									id="attributesName"
-									type="text"
-									placeholder=""
+								<Typography className="formTypography">
+									{t('Country Name')}
+									<span className="text-red"> *</span>
+								</Typography>
+								<Field
 									disabled={false}
-									changeInput={changeAttributesName}
+									name="counties"
+									placeholder={t('')}
+									component={TextFormField}
+									fullWidth
+									size="small"
 								/>
 							</Grid>
 
@@ -286,10 +292,48 @@ function Attribute() {
 								item
 								xs={12}
 								sm={6}
-								md={8}
-								lg={9}
-								className="flex flex-wrap justify-between items-start gap-[10px] formikFormField pt-[26px!important]"
+								md={4}
+								lg={3}
+								className="formikFormField pt-[5px!important]"
 							>
+								<Typography className="formTypography">
+									{t('Country Code')}
+									<span className="text-red"> *</span>
+								</Typography>
+								<Field
+									disabled={false}
+									name="countryCode"
+									placeholder={t('')}
+									component={TextFormField}
+									fullWidth
+									size="small"
+								/>
+							</Grid>
+
+							<Grid
+								item
+								xs={12}
+								sm={6}
+								md={6}
+								lg={6}
+								className="flex items-start gap-[10px] formikFormField pt-[26px!important]"
+							>
+								<Button
+									className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-white font-500 py-0 rounded-[6px] bg-primaryBlue hover:bg-primaryBlue/80"
+									type="submit"
+									variant="contained"
+									size="medium"
+									disabled={false}
+								>
+									{t('Save')}
+									{isCancelOrderReasonsDataLoading ? (
+										<CircularProgress
+											className="text-white ml-[5px]"
+											size={24}
+										/>
+									) : null}
+								</Button>
+
 								<Button
 									className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-gray-600 font-500 py-0 rounded-[6px] bg-gray-300 hover:bg-gray-300/80"
 									type="button"
@@ -298,17 +342,7 @@ function Attribute() {
 									disabled={false}
 									onClick={() => handleClearForm(resetForm)}
 								>
-									{t('Clear')}
-								</Button>
-								<Button
-									className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] lg:text-[14px] text-white font-500 py-0 rounded-[6px] bg-primaryBlue hover:bg-primaryBlue/80"
-									type="button"
-									variant="contained"
-									size="medium"
-									disabled={false}
-									onClick={handleOpenNewAttributeModal}
-								>
-									{t('CREATE_ATTRIBUTE')}
+									{t('Reset')}
 								</Button>
 							</Grid>
 						</Grid>
@@ -341,7 +375,7 @@ function Attribute() {
 						pageIndex={pageNo}
 						setPageSize={setPageSize}
 						searchByText=""
-						loading={isTableLoading}
+						//loading={isTableLoading}
 						count={count}
 						exportToExcel={null}
 						handleRowDeleteAction={null}
@@ -354,7 +388,7 @@ function Attribute() {
 						records={tableData}
 						tableRowViewHandler={tableRowViewHandler}
 						tableRowEditHandler={tableRowEditHandler}
-						disableSearch
+						disableSearch={false}
 					/>
 				</Grid>
 			</Grid>

@@ -9,6 +9,7 @@ i18next.addResourceBundle('si', 'promotionCycle', si);
 i18next.addResourceBundle('ta', 'promotionCycle', ta);
 
 const PromotionConfigComponent = lazy(() => import('./PromotionCycle'));
+const VehiclesDetailsForm = lazy(() => import('./VehiclesDetailsForm'));
 
 const PromotionConfig = {
 	settings: {
@@ -17,8 +18,12 @@ const PromotionConfig = {
 	permission: 'PROMOTION_CONFIG',
 	routes: [
 		{
-			path: 'promotion/promotion-cycle',
+			path: 'vehicles/vehicles-details',
 			element: <PromotionConfigComponent />
+		},
+		{
+			path: 'vehicles/vehicles-details/modify',
+			element: <VehiclesDetailsForm />
 		}
 	]
 };

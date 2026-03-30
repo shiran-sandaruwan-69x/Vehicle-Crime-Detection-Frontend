@@ -22,6 +22,9 @@ import {
 	PromotionCycleTypeApiRes
 } from './promotion-cycle-type/PromotionCycleType';
 import { CREATE_PROMOTION_CYCLE } from '../../../../axios/services/live-aquaria-services/promotion-services/PromotionsServices';
+import {useNavigate} from "react-router-dom";
+import {GET_ALL_VEHICLES} from "../../../../axios/services/live-aquaria-services/url_helper";
+import {getAllVehi} from "../../../../axios/services/live-aquaria-services/master-data-services/MasterDataServices";
 
 interface ErrorResponse {
 	response?: {
@@ -34,10 +37,11 @@ interface ErrorResponse {
 function PromotionCycle() {
 	const { t } = useTranslation('promotionCycle');
 	const [pageNo, setPageNo] = useState<number>(0);
+	const navigate = useNavigate();
 	const [pageSize, setPageSize] = useState<number>(5);
 	const [count, setCount] = useState(100);
 	const [isTableLoading, setTableLoading] = useState(false);
-	const [tableData, setTableData] = useState<PromotionCycleModifiedData[]>([]);
+	const [tableData, setTableData] = useState<any>([]);
 	const [selectedActiveRowData, setSelectedActiveRowData] = useState<PromotionCycleModifiedData>(null);
 	const [selectedDeleteRowData, setSelectedDeleteRowData] = useState<PromotionCycleModifiedData>(null);
 	const [selectedViewRowData, setSelectedViewRowData] = useState<PromotionCycleModifiedData>(null);
@@ -70,77 +74,66 @@ function PromotionCycle() {
 
 	const tableColumns = [
 		{
-			title: t('REF_NO'),
-			field: 'ref_no',
+			title: t('Vehicle No'),
+			field: 'vehicleNo',
 			cellStyle: {
 				padding: '4px 8px'
 			}
 		},
 		{
-			title: t('PROMOTION_CYCLE_NAME'),
-			field: 'name',
+			title: t('Vehicle Type'),
+			field: 'vehicleType',
 			cellStyle: {
 				padding: '4px 8px'
 			}
 		},
 		{
-			title: t('Start Date'),
-			field: 'start_date',
+			title: t('Vehicle Brand'),
+			field: 'vehicleBrand',
 			cellStyle: {
 				padding: '4px 8px'
 			}
 		},
 		{
-			title: t('Start Time'),
-			field: 'startTime',
+			title: t('Vehicle Color'),
+			field: 'vehicleColor',
 			cellStyle: {
 				padding: '4px 8px'
 			}
 		},
 		{
-			title: t('End Date'),
-			field: 'end_date',
+			title: t('Manufacture Year'),
+			field: 'manufactureYear',
 			cellStyle: {
 				padding: '4px 8px'
 			}
 		},
 		{
-			title: t('End Time'),
-			field: 'endTime',
+			title: t('Owner Name'),
+			field: 'ownerName',
 			cellStyle: {
 				padding: '4px 8px'
 			}
 		},
 		{
-			title: t('Active'),
-			field: 'active',
-			render: (rowData: PromotionCycleModifiedData, index) => (
-				<FormGroup>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={rowData.active}
-								onChange={handleSwitchChange(rowData.id, rowData)}
-								aria-label="login switch"
-								size="small"
-								sx={{
-									'& .muiltr-kpgjex-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track':
-										{
-											backgroundColor: '#387ed4'
-										}
-								}}
-							/>
-						}
-						label=""
-					/>
-				</FormGroup>
-			)
+			title: t('Owner NIC'),
+			field: 'ownerNIC',
+			cellStyle: {
+				padding: '4px 8px'
+			}
+		},
+		{
+			title: t('ACTIVE'),
+			field: 'is_active',
+			render: (rowData: any) => {
+				return rowData.is_active === 1 ? 'Active' : 'Inactive';
+			}
 		}
 	];
 
 	useEffect(() => {
-		if (debouncedFilter) changePageNoOrPageSize(filteredValues);
-	}, [debouncedFilter]);
+		fetchAllPromotionCycle();
+	}, []);
 
 	const handleSwitchChange = (index, rowData: PromotionCycleModifiedData) => async (event) => {
 		setSelectedActiveRowData(rowData);
@@ -148,13 +141,21 @@ function PromotionCycle() {
 	};
 
 	const tableRowViewHandler = (rowData: PromotionCycleModifiedData) => {
-		setSelectedViewRowData(rowData);
-		toggleViewModal();
+		navigate(`/vehicles/vehicles-details/modify`,{
+			state: {
+				id: rowData?.id,
+				vehicleNo: null,
+			}
+		})
 	};
 
 	const tableRowEditHandler = (rowData: PromotionCycleModifiedData) => {
-		setSelectedEditRowData(rowData);
-		toggleEditModal();
+		navigate(`/vehicles/vehicles-details/modify`,{
+			state: {
+				id: rowData?.id,
+				vehicleNo: null,
+			}
+		})
 	};
 
 	const tableRowDeleteHandler = (rowData: PromotionCycleModifiedData) => {
@@ -169,20 +170,14 @@ function PromotionCycle() {
 	const fetchAllPromotionCycle = async () => {
 		setTableLoading(true);
 		try {
-			const response: AxiosResponse<PromotionCycleTypeApiRes> = await axios.get(
-				`${CREATE_PROMOTION_CYCLE}?limit=${pageSize}&page=${pageNo}`
-			);
-			const transformedData: PromotionCycleModifiedData[] = response?.data?.data?.map(
-				(item: PromotionCycleRes) => ({
+			const response: any = await getAllVehi();
+			const transformedData: any[] = response?.map(
+				(item: any) => ({
 					...item,
-					startTime: item?.start_time ? item?.start_time.replace(' ', ':') : '',
-					endTime: item?.end_time ? item?.end_time.replace(' ', ':') : '',
-					repeatYearly: item?.is_repeat_yearly === 1,
-					active: item?.is_active === 1
+					is_active: item?.status == true ? 1 : 0,
 				})
 			);
 			setTableData(transformedData);
-			setCount(response?.data?.meta?.total);
 			setTableLoading(false);
 		} catch (error) {
 			setTableLoading(false);
@@ -303,18 +298,16 @@ function PromotionCycle() {
 	const handleClearForm = (resetForm: FormikHelpers<PromotionCycleFilterType>['resetForm']) => {
 		resetForm();
 		setFilteredValues({
-			startDate: null,
-			endDate: null,
-			cycleName: null
+			vehiclesNo: ''
 		});
 	};
 
 	return (
 		<div className="min-w-full max-w-[100vw]">
-			<NavigationViewComp title="Promotion / Promotion Cycle" />
+			<NavigationViewComp title="Vehicles / Vehicles Details" />
 
 			<Formik
-				initialValues={{ cycleName: '', startDate: '', endDate: '' }}
+				initialValues={{ vehiclesNo: '' }}
 				validationSchema={null}
 				onSubmit={(values: PromotionCycleFilterType) => {}}
 			>
@@ -328,100 +321,21 @@ function PromotionCycle() {
 							<Grid
 								item
 								xs={12}
-								sm={6}
-								md={4}
-								lg={3}
-								xl={2}
-								className="formikFormField pt-[5px!important]"
-							>
-								<Typography className="formTypography">{t('Cycle Name')}</Typography>
-								<CustomFormTextField
-									name="cycleName"
-									id="cycleName"
-									type="text"
-									placeholder=""
-									disabled={false}
-									changeInput={changeCycleName}
-								/>
-							</Grid>
-							<Grid
-								item
-								xs={12}
-								sm={6}
-								md={4}
-								lg={3}
-								xl={2}
-								className="formikFormField pt-[5px!important]"
-							>
-								<Typography className="formTypography">{t('Start Date')}</Typography>
-								<TextFormDateField
-									name="startDate"
-									type="date"
-									placeholder=""
-									id="scheduledDate"
-									min=""
-									max=""
-									disablePastDate={false}
-									changeInput={(value: string, form: FormikHelpers<FormValues>) => {
-										changeStartDate(value);
-										form.setFieldValue('startDate', value);
-									}}
-								/>
-							</Grid>
-
-							<Grid
-								item
-								xs={12}
-								sm={6}
-								md={4}
-								lg={3}
-								xl={2}
-								className="formikFormField pt-[5px!important]"
-							>
-								<Typography className="formTypography">{t('End Date')}</Typography>
-								<TextFormDateField
-									name="endDate"
-									type="date"
-									placeholder=""
-									id="scheduledDate"
-									min=""
-									max=""
-									disablePastDate={false}
-									changeInput={(value: string, form: FormikHelpers<FormValues>) => {
-										changeEndDate(value);
-										form.setFieldValue('endDate', value);
-									}}
-								/>
-							</Grid>
-
-							<Grid
-								item
-								xs={12}
-								sm={6}
+								sm={12}
 								md={12}
-								lg={3}
-								xl={6}
-								className="flex flex-wrap justify-between items-start gap-[10px] formikFormField !pt-[10px] sm:!pt-[26px] md:!pt-[10px] lg:!pt-[26px]"
+								lg={12}
+								xl={12}
+								className="flex flex-wrap justify-end items-start gap-[10px] formikFormField !pt-[10px] sm:!pt-[26px] md:!pt-[10px] lg:!pt-[26px]"
 							>
-								<Button
-									className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] xl:text-[14px] text-gray-600 font-500 lg:!px-[2px] xl:!p-[16px] py-0 rounded-[6px] bg-gray-300 hover:bg-gray-300/80"
-									type="submit"
-									variant="contained"
-									size="medium"
-									disabled={false}
-									onClick={() => handleClearForm(resetForm)}
-								>
-									{t('Clear Filters')}
-								</Button>
 								<Button
 									className="flex justify-center items-center min-w-[100px] min-h-[36px] max-h-[36px] text-[10px] sm:text-[12px] xl:text-[14px] text-white font-500 lg:!px-[2px] xl:!p-[16px] py-0 rounded-[6px] bg-primaryBlue hover:bg-primaryBlue/80"
 									type="button"
 									variant="contained"
 									size="medium"
-									onClick={createNewCycle}
+									onClick={()=>navigate(`/vehicles/vehicles-details/modify`)}
 								>
-									<span className="lg:hidden xl:block">{t('New Promotion Cycle')}</span>
-									<span className="hidden lg:block xl:hidden">New Promo Cycle</span>
+									<span className="lg:hidden xl:block">{t('Create Vehicle Profile')}</span>
+									<span className="hidden lg:block xl:hidden"></span>
 								</Button>
 							</Grid>
 						</Grid>
@@ -468,7 +382,7 @@ function PromotionCycle() {
 						records={tableData}
 						tableRowViewHandler={tableRowViewHandler}
 						tableRowEditHandler={tableRowEditHandler}
-						tableRowDeleteHandler={tableRowDeleteHandler}
+						//tableRowDeleteHandler={tableRowDeleteHandler}
 					/>
 				</Grid>
 			</Grid>

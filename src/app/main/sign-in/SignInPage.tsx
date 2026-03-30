@@ -31,59 +31,25 @@ function SignInPage() {
 	return (
 		<div className="flex min-w-0 flex-auto flex-col items-center sm:justify-center md:p-32">
 			<Paper className="flex min-h-full w-full overflow-hidden rounded-0 sm:min-h-auto sm:w-auto sm:rounded-2xl sm:shadow md:w-full md:max-w-6xl">
+
+				{/* LEFT SIDE LOGIN */}
 				<div className="w-full px-16 py-32 ltr:border-r-1 rtl:border-l-1 sm:w-auto sm:p-48 md:p-64">
 					<CardContent className="mx-auto w-full max-w-320 sm:mx-0 sm:w-320">
-						{/* <img
-							className="w-48"
-							src="assets/images/logo/logo.svg"
-							alt="logo"
-						/> */}
 
 						<Typography className="text-4xl text-gray-800 font-extrabold leading-tight tracking-tight">
 							Sign In
 						</Typography>
-						{/* <div className="mt-2 flex items-baseline font-medium">
-							<Typography>Don't have an account?</Typography>
-							<Link
-								className="ml-4"
-								to="/sign-up"
-							>
-								Sign up
-							</Link>
-						</div> */}
-
-						{/* Remove Logo */}
-
-						{/* <Tabs
-							value={_.findIndex(tabs, { id: selectedTabId })}
-							variant="fullWidth"
-							className="w-full mt-24 mb-32"
-							indicatorColor="secondary"
-						>
-							{tabs.map((item) => (
-								<Tab
-									onClick={() => handleSelectTab(item.id)}
-									key={item.id}
-									icon={
-										<img
-											className={item.logoClass}
-											src={logo}
-											alt={item.title}
-										/>
-									}
-									className="min-w-0"
-									// label={item.title}
-								/>
-							))}
-
-						</Tabs> */}
 
 						{selectedTabId === 'jwt' && <JwtLoginTab />}
 						{selectedTabId === 'firebase' && <FirebaseSignInTab />}
 						{selectedTabId === 'aws' && <AwsSignInTab />}
 					</CardContent>
 				</div>
+
+				{/* RIGHT SIDE AI BACKGROUND */}
 				<Box className="relative hidden h-full flex-auto items-center justify-center overflow-hidden p-64 md:flex lg:px-112 bg-primaryBlueDark">
+
+					{/* AI Vehicle Detection SVG */}
 					<svg
 						className="pointer-events-none absolute inset-0"
 						viewBox="0 0 960 540"
@@ -92,26 +58,41 @@ function SignInPage() {
 						preserveAspectRatio="xMidYMax slice"
 						xmlns="http://www.w3.org/2000/svg"
 					>
-						<Box
-							component="g"
-							sx={{ color: 'primary.light' }}
+						<g
 							className="opacity-20"
 							fill="none"
 							stroke="currentColor"
-							strokeWidth="100"
+							strokeWidth="3"
 						>
-							<circle
-								r="234"
-								cx="196"
-								cy="23"
-							/>
-							<circle
-								r="234"
-								cx="790"
-								cy="491"
-							/>
-						</Box>
+							{/* AI Detection Boxes */}
+							<rect x="100" y="120" width="220" height="120" rx="10" />
+							<rect x="620" y="300" width="200" height="120" rx="10" />
+
+							{/* Vehicle 1 */}
+							<rect x="200" y="260" width="120" height="40" rx="6" />
+							<circle cx="230" cy="305" r="10" />
+							<circle cx="290" cy="305" r="10" />
+
+							{/* Vehicle 2 */}
+							<rect x="700" y="180" width="120" height="40" rx="6" />
+							<circle cx="730" cy="225" r="10" />
+							<circle cx="790" cy="225" r="10" />
+
+							{/* CCTV Camera */}
+							<circle cx="480" cy="120" r="30" />
+							<line x1="480" y1="150" x2="480" y2="230" />
+
+							{/* AI Detection Lines */}
+							<line x1="320" y1="200" x2="480" y2="120" />
+							<line x1="700" y1="240" x2="480" y2="120" />
+							<line x1="260" y1="280" x2="480" y2="120" />
+
+							{/* Alert Radar */}
+							<circle cx="480" cy="120" r="60" strokeDasharray="10 10" />
+						</g>
 					</svg>
+
+					{/* Pattern SVG */}
 					<Box
 						component="svg"
 						className="absolute -right-64 -top-64 opacity-20"
@@ -123,7 +104,7 @@ function SignInPage() {
 					>
 						<defs>
 							<pattern
-								id="837c3e70-6c3a-44e6-8854-cc48c737b659"
+								id="patternDots"
 								x="0"
 								y="0"
 								width="20"
@@ -142,37 +123,23 @@ function SignInPage() {
 						<rect
 							width="220"
 							height="192"
-							fill="url(#523e836f-6c3a-44e6-8854-cc48c737b659)"
+							fill="url(#patternDots)"
 						/>
 					</Box>
 
+					{/* TEXT CONTENT */}
 					<div className="relative z-10 w-full max-w-2xl">
 						<div className="text-7xl font-bold leading-none text-gray-100">
-							<div>Welcome to LiveAquaria</div>
+							<div>Crime Vision</div>
 						</div>
-						<div className="mt-24 text-lg leading-6 tracking-tight text-gray-300">
-							Welcome to the LiveAquaria Admin Portal, your centralized hub for streamlined management and
-							efficient operations.
-						</div>
-						{/* <div className="mt-32 flex items-center">
-							<AvatarGroup
-								sx={{
-									'& .MuiAvatar-root': {
-										borderColor: 'primary.main'
-									}
-								}}
-							>
-								<Avatar src="assets/images/avatars/female-18.jpg" />
-								<Avatar src="assets/images/avatars/female-11.jpg" />
-								<Avatar src="assets/images/avatars/male-09.jpg" />
-								<Avatar src="assets/images/avatars/male-16.jpg" />
-							</AvatarGroup>
 
-							<div className="ml-16 font-medium tracking-tight text-gray-400">
-								More than 17k people joined us, it's your turn
-							</div>
-						</div> */}
+						<div className="mt-24 text-lg leading-6 tracking-tight text-gray-300">
+							AI-Powered Vehicle Crime Detection and Alert System designed to support
+							police operations through intelligent,
+							and real time crime detection alerts.
+						</div>
 					</div>
+
 				</Box>
 			</Paper>
 		</div>

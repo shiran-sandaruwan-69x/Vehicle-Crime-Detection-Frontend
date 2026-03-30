@@ -166,27 +166,19 @@ function UsersApp() {
 	const tableColumns = [
 		{
 			title: 'User Name',
-			field: 'user_name'
+			field: 'username'
 		},
 		{
 			title: 'First Name',
-			field: 'first_name'
-		},
-		{
-			title: 'Last Name',
-			field: 'last_name'
+			field: 'name'
 		},
 		{
 			title: 'Email',
 			field: 'email'
 		},
 		{
-			title: 'Mobile No',
-			field: 'mobile'
-		},
-		{
-			title: 'Employee ID',
-			field: 'nic'
+			title: 'NIC',
+			field: 'nicNo'
 		},
 		{
 			title: 'Status',
@@ -202,10 +194,14 @@ function UsersApp() {
 	const filterUsers = async (filterVals: AdvanceFilteringTypes) => {
 		try {
 			const response: AxiosResponse<GetUsersResponse> = await axios.get(
-				`${GET_ADMIN_USERS}?limit=${pageSize}&page=${pageNo + 1}&sort=user_name,asc&filter=user_name,${filterVals.userName ? filterVals.userName : null}|first_name,${filterVals.firstName ? filterVals.firstName : null}|last_name,${filterVals.lastName ? filterVals.lastName : null}|email,${filterVals.email ? filterVals.email : null}|mobile,${filterVals.mobile ? filterVals.mobile : null}|is_active,${filterVals.status ? filterVals.status : null}`
+				`${GET_ADMIN_USERS}`
 			);
-			setUsers(response.data.data);
-			setCount(response.data.meta.total);
+			const data = response?.data?.map((item) => ({
+				...item,
+				is_active: item?.status == true ? 1 : 0,
+			}));
+			setUsers(data);
+			//setCount(response.data.meta.total);
 		} catch (error) {
 			const axiosError = error as ExtendedAxiosError;
 
@@ -221,15 +217,13 @@ function UsersApp() {
 
 	const fetchUserRoles = async () => {
 		try {
-			const response: AxiosResponse<GetRoleResponse> = await axios.get(GET_USER_ROLES);
-			const userRolesLOV: { label: string; value: number }[] = response.data.data.map((role: Role) => {
-				return {
-					label: role.name,
-					value: role.id
-				};
-			});
+			const response: AxiosResponse<any> = await axios.get(`${GET_USER_ROLES}`);
+			const data = response?.data?.map((item) => ({
+				label: item?.name,
+				value: item?.id
+			}));
 
-			setUserRoles(userRolesLOV);
+			setUserRoles(data);
 		} catch (error) {
 			const axiosError = error as ExtendedAxiosError;
 
@@ -286,159 +280,9 @@ function UsersApp() {
 				<Grid
 					item
 					xs={12}
-					sm={6}
-					md={4}
-					lg={3}
-					xl={2}
-					className="formikFormField pt-[5px!important]"
-				>
-					<Typography className="formTypography">User Name</Typography>
-					<TextField
-						className="w-full"
-						id="outlined-basic"
-						label=""
-						variant="outlined"
-						size="small"
-						onChange={(event) => {
-							setFilteredValues({
-								...filteredValues,
-								userName: event.target.value
-							});
-						}}
-					/>
-				</Grid>
-				<Grid
-					item
-					xs={12}
-					sm={6}
-					md={4}
-					lg={3}
-					xl={2}
-					className="formikFormField pt-[5px!important]"
-				>
-					<Typography className="formTypography">First Name</Typography>
-					<TextField
-						id="outlined-basic"
-						label=""
-						variant="outlined"
-						size="small"
-						className="w-full"
-						onChange={(event) => {
-							setFilteredValues({
-								...filteredValues,
-								firstName: event.target.value
-							});
-						}}
-					/>
-				</Grid>
-				<Grid
-					item
-					xs={12}
-					sm={6}
-					md={4}
-					lg={3}
-					xl={2}
-					className="formikFormField pt-[5px!important]"
-				>
-					<Typography className="formTypography">Last Name</Typography>
-					<TextField
-						id="outlined-basic"
-						label=""
-						variant="outlined"
-						size="small"
-						className="w-full"
-						onChange={(event) => {
-							setFilteredValues({
-								...filteredValues,
-								lastName: event.target.value
-							});
-						}}
-					/>
-				</Grid>
-				<Grid
-					item
-					xs={12}
-					sm={6}
-					md={4}
-					lg={3}
-					xl={2}
-					className="formikFormField pt-[5px!important]"
-				>
-					<Typography className="formTypography">Email</Typography>
-					<TextField
-						id="outlined-basic"
-						label=""
-						variant="outlined"
-						size="small"
-						className="w-full"
-						onChange={(event) => {
-							setFilteredValues({
-								...filteredValues,
-								email: event.target.value
-							});
-						}}
-					/>
-				</Grid>
-				<Grid
-					item
-					xs={12}
-					sm={6}
-					md={4}
-					lg={3}
-					xl={2}
-					className="formikFormField pt-[5px!important]"
-				>
-					<Typography className="formTypography">Mobile</Typography>
-					<TextField
-						id="outlined-basic"
-						label=""
-						variant="outlined"
-						size="small"
-						className="w-full"
-						onChange={(event) => {
-							setFilteredValues({
-								...filteredValues,
-								mobile: event.target.value
-							});
-						}}
-					/>
-				</Grid>
-				<Grid
-					item
-					xs={12}
-					sm={6}
-					md={4}
-					lg={3}
-					xl={2}
-					className="formikFormField pt-[5px!important]"
-				>
-					<Typography className="formTypography">Status</Typography>
-					<Autocomplete
-						size="small"
-						disablePortal
-						options={StatusOptions}
-						className="w-full"
-						renderInput={(params) => (
-							<TextField
-								{...params}
-								label=""
-							/>
-						)}
-						onChange={(event, value) => {
-							setFilteredValues({
-								...filteredValues,
-								status: value?.value.toString()
-							});
-						}}
-					/>
-				</Grid>
-
-				<Grid
-					item
-					xs={12}
 					sm={12}
-					md={4}
-					lg={6}
+					md={12}
+					lg={12}
 					xl={12}
 					className="flex flex-wrap justify-end items-end gap-[10px] formikFormField pt-[10px!important]"
 				>
@@ -448,7 +292,7 @@ function UsersApp() {
 						variant="contained"
 						size="medium"
 						onClick={() => handleFormModelOpen(true, false, false, null)}
-						disabled={!(permissionsToStore && permissionsToStore.action)}
+						//disabled={!(permissionsToStore && permissionsToStore.action)}
 					>
 						New User
 					</Button>
@@ -488,9 +332,9 @@ function UsersApp() {
 						selectionExport={null}
 						isColumnChoser
 						records={users}
-						tableRowViewHandler={permissionsToShow && permissionsToShow.action ? tableRowViewHandler : null}
+						tableRowViewHandler={tableRowViewHandler}
 						tableRowEditHandler={
-							permissionsToUpdate && permissionsToUpdate.action ? tableRowEditHandler : null
+							tableRowEditHandler
 						}
 						disableSearch
 					/>

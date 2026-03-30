@@ -1,6 +1,6 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { CircularProgress } from '@mui/material';
+import {CircularProgress, FormControlLabel, Switch} from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { Field, FieldArray, Form, Formik, FormikHelpers } from 'formik';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
@@ -20,6 +20,9 @@ import {
 import TextFormField from '../../../../../common/FormComponents/FormTextField';
 import { AttributeFormData, MappedAttribute } from '../attribute-types/AttributeTypes';
 import AttributeValuesDeleteDialogForm from './AttributeValuesDeleteDialogForm';
+import {Controller, useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {z} from "zod";
 
 interface ErrorResponse {
 	response?: {
@@ -31,31 +34,40 @@ interface ErrorResponse {
 interface Props {
 	toggleModal: () => void;
 	isOpen: boolean;
-	clickedRowData: MappedAttribute;
+	clickedRowData: any;
 	compType: string;
 	getAllAttributes: () => void;
 }
-
+const schema = z.object({
+	is_active: z.number(),
+});
 function ViewAttributeDialogForm({ toggleModal, isOpen, clickedRowData, compType, getAllAttributes }: Props) {
 	const { t } = useTranslation('attribute');
 	const [isViewAttributeDialogFormDataLoading, setViewAttributeDialogFormDataLoading] = useState(false);
 	const [isDeleteValueId, setDeleteValueId] = useState<string>(null);
 	const [isOpenDeleteValueModal, setOpenDeleteValueModal] = useState(false);
 	const toggleDeleteValueModal = () => setOpenDeleteValueModal(!isOpenDeleteValueModal);
-	const onSubmit = async (values: AttributeFormData) => {
+	console.log('clickedRowData',clickedRowData)
+	const defaultValues = {
+		id: clickedRowData ? Number(clickedRowData.id) : 0,
+		counties: clickedRowData.counties ? clickedRowData.counties : '',
+		countryCode: clickedRowData.countryCode ? clickedRowData.countryCode : '',
+		is_active: clickedRowData ? Number(clickedRowData?.is_active) : 1,
+	};
+	const { handleSubmit, formState, control } = useForm<any>({
+		mode: 'onChange',
+		defaultValues,
+		resolver: zodResolver(schema)
+	});
+
+	const onSubmit = async (values: any) => {
+		console.log('values',values)
 		setViewAttributeDialogFormDataLoading(true);
-		const updatedValues = values.values.map((value, index) => {
-			const valueId = clickedRowData.values[index]?.valId || '';
-			return {
-				id: valueId,
-				name: value
-			};
-		});
 
 		const dataToUpdate = {
-			name: values.attribute,
-			item_attribute: updatedValues,
-			is_active: clickedRowData.active === true ? 1 : 0
+			counties: values.counties ? values.counties : '',
+			countryCode: values.countryCode ? values.countryCode : '',
+			status: values?.is_active
 		};
 
 		try {
@@ -79,14 +91,11 @@ function ViewAttributeDialogForm({ toggleModal, isOpen, clickedRowData, compType
 		}
 	};
 
-	const schema = yup.object().shape({
-		attribute: yup.string().required('Attribute is required'),
-		values: yup.array().of(yup.string().required('Value is required')).min(1, 'At least one value is required')
-	});
-
 	const initialValues = {
-		attribute: clickedRowData.attribute || '',
-		values: clickedRowData.values ? clickedRowData.values.map((valueObj) => valueObj.value) : ['']
+		id: clickedRowData ? Number(clickedRowData.id) : 0,
+		counties: clickedRowData.counties ? clickedRowData.counties : '',
+		countryCode: clickedRowData.countryCode ? clickedRowData.countryCode : '',
+		is_active: clickedRowData ? clickedRowData?.is_active : 1,
 	};
 
 	const handleClearForm = (resetForm: FormikHelpers<AttributeFormData>['resetForm']) => {
@@ -136,6 +145,11 @@ function ViewAttributeDialogForm({ toggleModal, isOpen, clickedRowData, compType
 		}
 	};
 
+	const schema2 = yup.object().shape({
+		counties: yup.string().required(t('Country is required')),
+		countryCode: yup.string().required(t('Country Code is required'))
+	});
+
 	return (
 		<Dialog
 			fullWidth
@@ -145,13 +159,13 @@ function ViewAttributeDialogForm({ toggleModal, isOpen, clickedRowData, compType
 		>
 			<DialogTitle className="pb-0">
 				<h6 className="text-[10px] sm:text-[12px] lg:text-[14px] text-gray-600 font-400">
-					{compType === 'view' ? 'View' : 'Edit'} Attribute
+					{compType === 'view' ? 'View' : 'Edit'} Counties
 				</h6>
 			</DialogTitle>
 			<DialogContent>
 				<Formik
 					initialValues={initialValues}
-					validationSchema={schema}
+					validationSchema={schema2}
 					onSubmit={onSubmit}
 				>
 					{({ values, setFieldValue, isValid, resetForm }) => (
@@ -169,83 +183,80 @@ function ViewAttributeDialogForm({ toggleModal, isOpen, clickedRowData, compType
 									className="formikFormField pt-[5px!important]"
 								>
 									<Typography className="formTypography">
-										Attribute
+										{t('Country Name')}
 										<span className="text-red"> *</span>
 									</Typography>
 									<Field
-										disabled={compType === 'view'}
-										name="attribute"
+										disabled={false}
+										name="counties"
 										placeholder={t('')}
 										component={TextFormField}
 										fullWidth
 										size="small"
-										variant="outlined"
-										type="text"
-										className=""
 									/>
 								</Grid>
 
-								<FieldArray name="values">
-									{({ push, remove }) => (
-										<Grid
-											item
-											md={12}
-											sm={12}
-											xs={12}
-											className="pt-[5px!important]"
-										>
-											<Typography className="formTypography">
-												Values
-												<span className="text-red"> *</span>
-											</Typography>
-											<div className="flex flex-wrap justify-between items-end">
-												{(values.values || []).map((_, index) => (
-													<div
-														className={`flex justify-between items-center gap-[5px] ${
-															compType === 'view' ? 'w-full' : 'w-[calc(100%-40px)]'
-														}`}
-													>
-														<Field
-															className="mb-[8px]"
-															name={`values.${index}`}
-															component={TextFormField}
-															placeholder="Enter value"
-															fullWidth
-															size="small"
-															variant="outlined"
-															disabled={compType === 'view'}
-														/>
+								<Grid
+									item
+									md={12}
+									sm={12}
+									xs={12}
+									className="formikFormField pt-[5px!important]"
+								>
+									<Typography className="formTypography">
+										{t('Country Code')}
+										<span className="text-red"> *</span>
+									</Typography>
+									<Field
+										disabled={false}
+										name="countryCode"
+										placeholder={t('')}
+										component={TextFormField}
+										fullWidth
+										size="small"
+									/>
+								</Grid>
 
-														{compType === 'view' ? (
-															''
-														) : (
-															<IconButton
-																className="mb-[8px]"
-																disabled={compType === 'view'}
-																onClick={() => removeValues(values, index, remove)}
-																color="error"
-															>
-																<CancelIcon />
-															</IconButton>
-														)}
-													</div>
-												))}
-
-												{compType === 'view' ? (
-													''
-												) : (
-													<IconButton
+								<Grid
+									item
+									md={12}
+									sm={12}
+									xs={12}
+									className="formikFormField pt-[5px!important]"
+								>
+									<Controller
+										name="is_active"
+										control={control}
+										render={({ field }) => (
+											<FormControlLabel
+												control={
+													<Switch
+														{...field}                    // spreads value, onChange, onBlur, name, ref
+														checked={field.value === 1}   // since you're storing 1/0
 														disabled={compType === 'view'}
-														onClick={() => push('')}
-														className="text-primaryBlue mb-[8px]"
-													>
-														<AddCircleIcon />
-													</IconButton>
-												)}
-											</div>
-										</Grid>
-									)}
-								</FieldArray>
+														size="small"
+														sx={{
+															'& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+																backgroundColor: '#387ed4 !important',
+															},
+															'& .MuiSwitch-thumb': {
+																backgroundColor: '#387ed4',
+															},
+															'& .MuiSwitch-switchBase.Mui-disabled .MuiSwitch-thumb': {
+																backgroundColor: '#b2d4fe',
+															},
+														}}
+														onChange={(e) => {
+															field.onChange(e.target.checked ? 1 : 0)
+															setFieldValue('is_active',e.target.checked ? 1 : 0)
+														}}
+													/>
+												}
+												label={field.value === 1 ? 'Active' : 'Inactive'}
+											/>
+										)}
+									/>
+								</Grid>
 
 								<Grid
 									item

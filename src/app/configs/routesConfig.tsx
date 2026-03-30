@@ -28,12 +28,13 @@ import GeneralPagesConfig from '../main/live-aquaria/content-management/general-
 import LiveAquariaLaqContentManagementConfig from '../main/live-aquaria/content-management/LiveAquariaLaqContentManagementConfig';
 import ClassicForgotPasswordPage from '../main/pages/authentication/forgot-password/ClassicForgotPasswordPage';
 import SystemSettingsConfig from '../main/live-aquaria/system-settings/SystemSettingsConfig';
+import AnalyticsDashboardAppConfig from "../main/dashboards/analytics/AnalyticsDashboardAppConfig";
 // import authenticationPagesConfigs from '../main/pages/authentication/authenticationPagesConfigs';
 
 const routeConfigs: FuseRouteConfigsType = [
 	SignOutConfig,
 	SignInConfig,
-	// SignUpConfig,
+	AnalyticsDashboardAppConfig,
 	DocumentationConfig,
 	GeneralPagesConfig,
 	...PagesConfigs,

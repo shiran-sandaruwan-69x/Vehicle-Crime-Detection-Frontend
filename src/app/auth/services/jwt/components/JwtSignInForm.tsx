@@ -73,14 +73,14 @@ function JwtSignInForm() {
 	};
 
 	useEffect(() => {
-		setValue('userName', 'shiran', {
-			shouldDirty: true,
-			shouldValidate: true
-		});
-		setValue('password', '1234', {
-			shouldDirty: true,
-			shouldValidate: true
-		});
+		// setValue('userName', 'shiran', {
+		// 	shouldDirty: true,
+		// 	shouldValidate: true
+		// });
+		// setValue('password', '1234', {
+		// 	shouldDirty: true,
+		// 	shouldValidate: true
+		// });
 	}, [setValue]);
 
 	function onSubmit(formData: FormType) {

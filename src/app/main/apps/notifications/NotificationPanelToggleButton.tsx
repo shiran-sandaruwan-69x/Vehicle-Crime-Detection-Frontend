@@ -10,6 +10,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { getAllReports } from "../../../axios/services/live-aquaria-services/master-data-services/MasterDataServices";
 import { useNavigate } from "react-router-dom";
+import {useGetAllNotificationsQuery} from "./NotificationApi";
+import {toggleNotificationPanel} from "./notificationPanelSlice";
+import {useAppDispatch} from "app/store/hooks";
 
 type NotificationPanelToggleButtonProps = {
 	children?: ReactNode;
@@ -17,11 +20,11 @@ type NotificationPanelToggleButtonProps = {
 
 function NotificationPanelToggleButton(props: NotificationPanelToggleButtonProps) {
 	const { children = <FuseSvgIcon>heroicons-outline:bell</FuseSvgIcon> } = props;
-
+	const { data: notifications } = useGetAllNotificationsQuery();
 	const navigate = useNavigate();
 	const [hotlineOrders, setHotlineOrders] = useState<any[]>([]);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
+	const dispatch = useAppDispatch();
 	const open = Boolean(anchorEl);
 
 	// Fetch notifications once when component mounts

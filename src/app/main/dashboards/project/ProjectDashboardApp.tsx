@@ -36,7 +36,7 @@ function ProjectDashboardApp() {
 
 	// === NEW: useJsApiLoader (fixes "google is not defined") ===
 	const { isLoaded, loadError } = useJsApiLoader({
-		googleMapsApiKey: "AIzaSyBPNtk4IWtmhKFtgG_vA0l6Ye_8cxNWJUw",   // your key
+		googleMapsApiKey: "",   // your key
 		// libraries: ['places']   // add if you need Places API later
 	});
 

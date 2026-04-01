@@ -51,7 +51,7 @@ function CaseReportForm() {
 		lng: ''
 	});
 	const { isLoaded } = useLoadScript({
-		googleMapsApiKey: 'AIzaSyBPNtk4IWtmhKFtgG_vA0l6Ye_8cxNWJUw'
+		googleMapsApiKey: ''
 	});
 
 	const [selectedLocation, setSelectedLocation] = useState({
